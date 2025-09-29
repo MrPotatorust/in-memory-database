@@ -8,13 +8,14 @@
 #define VALUE_SZ 100
 
 
-typedef struct storageItem
+typedef struct Node
 {
+    struct Node *next;
     char key[KEY_SZ];
     char value[VALUE_SZ];
-} storageItem;
+} Node;
 
-struct storageItem storage[STORAGE_SZ];
+struct Node *storage[STORAGE_SZ];
 
 
 
@@ -55,7 +56,7 @@ int action(){
     }
 
 
-    struct storageItem newItem;
+    struct Node newItem;
     strncpy(newItem.key, inputKey, KEY_SZ - 1);
     newItem.key[KEY_SZ - 1] = '\0';
 
@@ -66,8 +67,13 @@ int action(){
     int arrIndex = hash(inputKey) % STORAGE_SZ;
 
 
+    if(storage[arrIndex] == NULL){
+        newItem.next = NULL;
+        *storage[arrIndex] = newItem;
+    }
 
-    storage[arrIndex] = newItem;
+    
+
 
 
 
@@ -77,11 +83,16 @@ int action(){
 void printStorage(){
     
     for (int i = 0; i < STORAGE_SZ; i++ ){
-        if (storage[i].key[0] != '\0' && storage[i].value[0] != '\0') {
+        if (storage[i]->key[0] != '\0' && storage[i]->value[0] != '\0') {
             printf("------------------------ \n");
-            printf("%s, %s\n", storage[i].key, storage[i].value);
+            printf("%s, %s\n", storage[i]->key, storage[i]->value);
         }
     }
+}
+
+void addToLinkedList(Node newItem){
+
+    
 }
 
 // djb2 hash algorithm
