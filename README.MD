@@ -1,0 +1,1 @@
+run `make` in the root directory compile the program
