@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 
 #define STORAGE_SZ 1000
@@ -15,13 +16,16 @@ typedef struct Node
     char value[VALUE_SZ];
 } Node;
 
-struct Node *storage[STORAGE_SZ];
+Node *storage[STORAGE_SZ];
 
 
 
 int action();
 void printStorage();
 unsigned long hash(unsigned char *str);
+void addToLinkedList(Node *newNode, int arrIndex);
+void freeStorage();
+
 
 int main(int argc, char* argv[]){
     
@@ -56,25 +60,27 @@ int action(){
     }
 
 
-    struct Node newItem;
-    strncpy(newItem.key, inputKey, KEY_SZ - 1);
-    newItem.key[KEY_SZ - 1] = '\0';
+    Node *newNode = malloc(sizeof(Node));
+    strncpy(newNode->key, inputKey, KEY_SZ - 1);
+    newNode->key[KEY_SZ - 1] = '\0';
 
-    strncpy(newItem.value, inputValue, VALUE_SZ - 1);
-    newItem.value[VALUE_SZ - 1] = '\0';
+    strncpy(newNode->value, inputValue, VALUE_SZ - 1);
+    newNode->value[VALUE_SZ - 1] = '\0';
 
+    newNode->next = NULL;
 
     int arrIndex = hash(inputKey) % STORAGE_SZ;
 
 
     if(storage[arrIndex] == NULL){
-        newItem.next = NULL;
-        *storage[arrIndex] = newItem;
+        storage[arrIndex] = newNode;
+    }
+    else {
+        addToLinkedList(newNode, arrIndex);
     }
 
-    
 
-
+    printStorage();
 
 
     return 0;
@@ -82,18 +88,45 @@ int action(){
 
 void printStorage(){
     
+    
+    printf("=============================== \n");
     for (int i = 0; i < STORAGE_SZ; i++ ){
-        if (storage[i]->key[0] != '\0' && storage[i]->value[0] != '\0') {
+
+        Node *curNode = storage[i];
+
+        if(curNode != NULL){
             printf("------------------------ \n");
-            printf("%s, %s\n", storage[i]->key, storage[i]->value);
+            printf("%s, %s\n", curNode->key, curNode->value);
+            if (curNode->next != NULL){
+                while (curNode->next != NULL)
+                {
+                    curNode = curNode->next;
+                    printf("| \n");
+                    printf("->");
+                    printf(" %s, %s\n", curNode->key, curNode->value);
+                }                
+            }            
         }
     }
+    printf("=============================== \n");
 }
 
-void addToLinkedList(Node newItem){
+void addToLinkedList(Node *newNode, int arrIndex){
 
+    Node *curNode = storage[arrIndex];
+
+    while (curNode->next != NULL)
+    {
+        curNode = curNode->next;
+    }
+    curNode->next = newNode;
     
 }
+
+void freeStorage(){
+
+}
+
 
 // djb2 hash algorithm
 unsigned long hash(unsigned char *str)
