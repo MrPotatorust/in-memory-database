@@ -11,7 +11,7 @@ struct config
 };
 
 
-int main(){
+int parse(){
     FILE *configFile = fopen(configPath, "r");
 
     if(configFile == NULL){

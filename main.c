@@ -3,28 +3,12 @@
 #include <string.h>
 #include <stdbool.h>
 
-
-#define STORAGE_SZ 1000
-#define KEY_SZ 20
-#define VALUE_SZ 100
-
-
-typedef struct Node
-{
-    struct Node *next;
-    char key[KEY_SZ];
-    char value[VALUE_SZ];
-} Node;
-
-Node *storage[STORAGE_SZ];
-
+#include "config.h"
+#include "./src/helpers.h"
 
 
 int action();
 void printStorage();
-unsigned long hash(unsigned char *str);
-void addToLinkedList(Node *newNode, int arrIndex);
-void freeStorage();
 
 
 int main(int argc, char* argv[]){
@@ -36,15 +20,22 @@ int main(int argc, char* argv[]){
     while (!returnCode)
     {
         returnCode = action();
-        // printStorage();
+        printStorage();
     }
     
-
+    freeStorage();
+    
     return 0;
 }
 
 int action(){
 
+    char inputAction[20];
+    
+    printf("ACTION: ");
+    fgets(inputAction, sizeof(inputAction), stdin);
+    inputAction[strcspn(inputAction, "\n")] = 0;
+    
     char inputKey[KEY_SZ];
     char inputValue[VALUE_SZ];
 
@@ -79,63 +70,5 @@ int action(){
         addToLinkedList(newNode, arrIndex);
     }
 
-
-    printStorage();
-
-
     return 0;
-}
-
-void printStorage(){
-    
-    
-    printf("=============================== \n");
-    for (int i = 0; i < STORAGE_SZ; i++ ){
-
-        Node *curNode = storage[i];
-
-        if(curNode != NULL){
-            printf("------------------------ \n");
-            printf("%s, %s\n", curNode->key, curNode->value);
-            if (curNode->next != NULL){
-                while (curNode->next != NULL)
-                {
-                    curNode = curNode->next;
-                    printf("| \n");
-                    printf("->");
-                    printf(" %s, %s\n", curNode->key, curNode->value);
-                }                
-            }            
-        }
-    }
-    printf("=============================== \n");
-}
-
-void addToLinkedList(Node *newNode, int arrIndex){
-
-    Node *curNode = storage[arrIndex];
-
-    while (curNode->next != NULL)
-    {
-        curNode = curNode->next;
-    }
-    curNode->next = newNode;
-    
-}
-
-void freeStorage(){
-
-}
-
-
-// djb2 hash algorithm
-unsigned long hash(unsigned char *str)
-{
-    unsigned long hash = 5381;
-    int c;
-
-    while (c = *str++)
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-
-    return hash;
 }
