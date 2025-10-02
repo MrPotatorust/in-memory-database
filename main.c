@@ -5,6 +5,7 @@
 
 #include "config.h"
 #include "./src/helpers.h"
+#include "./src/actions.h"
 
 
 int action();
@@ -20,7 +21,6 @@ int main(int argc, char* argv[]){
     while (!returnCode)
     {
         returnCode = action();
-        printStorage();
     }
     
     freeStorage();
@@ -30,44 +30,27 @@ int main(int argc, char* argv[]){
 
 int action(){
 
-    char inputAction[20];
+    char inputActionStr[20];
+    char inputAction;
     
     printf("ACTION: ");
-    fgets(inputAction, sizeof(inputAction), stdin);
-    inputAction[strcspn(inputAction, "\n")] = 0;
+    fgets(inputActionStr, sizeof(inputActionStr), stdin);
+    inputActionStr[strcspn(inputActionStr, "\n")] = 0;
+
+    inputAction = inputActionStr[0];
     
-    char inputKey[KEY_SZ];
-    char inputValue[VALUE_SZ];
-
-    printf("Key: ");
-    fgets(inputKey, sizeof(inputKey), stdin);
-    inputKey[strcspn(inputKey, "\n")] = 0;
-    printf("Value: ");
-    fgets(inputValue, sizeof(inputValue), stdin);
-    inputValue[strcspn(inputValue, "\n")] = 0;
-
-    if(!inputKey || !inputValue){
+    switch (inputAction)
+    {
+    case 's':
+        action_save();
+        break;
+    case 'e':
         return 1;
-    }
-
-
-    Node *newNode = malloc(sizeof(Node));
-    strncpy(newNode->key, inputKey, KEY_SZ - 1);
-    newNode->key[KEY_SZ - 1] = '\0';
-
-    strncpy(newNode->value, inputValue, VALUE_SZ - 1);
-    newNode->value[VALUE_SZ - 1] = '\0';
-
-    newNode->next = NULL;
-
-    int arrIndex = hash(inputKey) % STORAGE_SZ;
-
-
-    if(storage[arrIndex] == NULL){
-        storage[arrIndex] = newNode;
-    }
-    else {
-        addToLinkedList(newNode, arrIndex);
+    case 'p':
+        printStorage();
+        break;
+    default:
+        break;
     }
 
     return 0;
