@@ -4,7 +4,7 @@
 #include "../config.h"
 #include "helpers.h"
 
-int action_save(){
+int actionSave(){
     char inputKey[KEY_SZ];
     char inputValue[VALUE_SZ];
 

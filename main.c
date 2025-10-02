@@ -42,7 +42,7 @@ int action(){
     switch (inputAction)
     {
     case 's':
-        action_save();
+        actionSave();
         break;
     case 'e':
         return 1;
