@@ -69,6 +69,27 @@ void freeStorage(){
     }
 }
 
+int getValue(char *key, char *valueStr){
+
+    Node *curNode = storage[getStorageIndex(key)];
+
+    if (curNode == NULL){
+        return 1;
+    }
+
+    while (!strcmp(curNode->key, key) || curNode->next)
+    {
+        curNode = curNode->next;
+    }
+
+    strcpy(valueStr, curNode->value);
+    return 0;
+}
+
+int getStorageIndex(unsigned char *str){
+    return hash(str) % STORAGE_SZ;
+}
+
 // djb2 hash algorithm
 unsigned long hash(unsigned char *str)
 {

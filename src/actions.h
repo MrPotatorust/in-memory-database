@@ -1,2 +1,3 @@
 
 int actionSave();
+int actionGetValue();

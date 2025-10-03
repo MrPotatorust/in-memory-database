@@ -14,10 +14,10 @@ void printStorage();
 
 int main(int argc, char* argv[]){
     
-    char *userInput[100];
-    
+    char *userInput[100];   
     int returnCode = 0;
     
+
     while (!returnCode)
     {
         returnCode = action();
@@ -49,6 +49,8 @@ int action(){
     case 'p':
         printStorage();
         break;
+    case 'g':
+        actionGetValue();
     default:
         break;
     }

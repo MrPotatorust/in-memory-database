@@ -29,7 +29,7 @@ int actionSave(){
 
     newNode->next = NULL;
 
-    int arrIndex = hash(inputKey) % STORAGE_SZ;
+    int arrIndex = getStorageIndex(inputKey);
 
 
     if(storage[arrIndex] == NULL){
@@ -39,5 +39,26 @@ int actionSave(){
         addToLinkedList(newNode, arrIndex);
     }
 
+    return 0;
+}
+
+int actionGetValue(){
+
+    char keyStr[KEY_SZ];
+
+    printf("KEY: ");
+    fgets(keyStr, sizeof(keyStr), stdin);
+    keyStr[strcspn(keyStr, "\n")] = 0;
+
+    char value[VALUE_SZ];
+    int valueCode = getValue(keyStr, value);
+
+    if (value && !valueCode){
+        printf("%s \n", value);
+    } 
+    else {
+        printf("Could not find the desired value. \n");
+    }
+    
     return 0;
 }
