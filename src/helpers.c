@@ -77,7 +77,7 @@ int getValue(char *key, char *valueStr){
         return 1;
     }
 
-    while (!strcmp(curNode->key, key) || curNode->next)
+    while (!strcmp(curNode->key, key) || curNode->next != NULL)
     {
         curNode = curNode->next;
     }
@@ -89,6 +89,17 @@ int getValue(char *key, char *valueStr){
 int getStorageIndex(unsigned char *str){
     return hash(str) % STORAGE_SZ;
 }
+
+int getString(char *outputStr){
+    char userInput[USER_INPUT_SZ];
+
+    fgets(userInput, sizeof(userInput), stdin);
+    userInput[strcspn(userInput, "\n")] = 0;
+
+    strcpy(outputStr, userInput);
+
+    return 0;
+} 
 
 // djb2 hash algorithm
 unsigned long hash(unsigned char *str)

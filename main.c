@@ -9,7 +9,6 @@
 
 
 int action();
-void printStorage(); 
 
 
 int main(int argc, char* argv[]){
