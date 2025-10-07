@@ -77,7 +77,7 @@ int getValue(char *key, char *valueStr){
         return 1;
     }
 
-    while (!strcmp(curNode->key, key) || curNode->next != NULL)
+    while (strcmp(curNode->key, key) || curNode->next != NULL)
     {
         curNode = curNode->next;
     }
