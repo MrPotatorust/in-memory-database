@@ -3,6 +3,7 @@
 #include <string.h>
 #include "helpers.h"
 #include "../config.h"
+#include <ctype.h>
 
 
 void printStorage(){    
@@ -108,6 +109,34 @@ int getString(char *outputStr){
 
     return 0;
 } 
+
+// This can be written simpler with a for loop but I wanted to try it with a for loop 
+int parseInt(char *inputString, int *outputInt){
+
+    if(inputString == NULL || outputInt == NULL){
+        printf("Tried to pass NULL pointer/s into parseInt(). \n");
+        return 1;
+    }
+
+    int charIndex = 0;
+    char curChar = inputString[charIndex];
+    
+    if(curChar == '\0'){
+        printf("First char is nul in parseInt(). \n");
+        return 1;
+    }
+
+    while (curChar != '\0'){
+        isdigit(curChar);
+
+        charIndex++;
+        curChar = inputString[charIndex];
+    }
+
+    *outputInt = atoi(inputString); 
+
+    return 0;
+}
 
 // djb2 hash algorithm
 unsigned long hash(unsigned char *str)
