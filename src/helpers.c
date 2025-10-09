@@ -30,7 +30,12 @@ void printStorage(){
     printf("=============================== \n");
 }
 
-void saveNode(Node *newNode, int arrIndex){
+int saveNode(Node *newNode, int arrIndex){
+
+    if(storage[arrIndex] == NULL){
+        storage[arrIndex] = newNode;
+        return 0;
+    }
 
     Node *curNode = storage[arrIndex];
 
@@ -40,6 +45,7 @@ void saveNode(Node *newNode, int arrIndex){
     }
     curNode->next = newNode;
     
+    return 0;
 }
 
 void freeStorage(){

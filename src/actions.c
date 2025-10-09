@@ -32,13 +32,7 @@ int actionSave(){
     int arrIndex = getStorageIndex(inputKey);
 
 
-    if(storage[arrIndex] == NULL){
-        storage[arrIndex] = newNode;
-    }
-    else {
-        saveNode(newNode, arrIndex);
-    }
-
+    saveNode(newNode, arrIndex);
     return 0;
 }
 

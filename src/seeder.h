@@ -1,0 +1,1 @@
+int seedStorage(int nodeNumber);
