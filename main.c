@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 #include "config.h"
 #include "./src/helpers.h"
@@ -13,9 +14,19 @@ int action();
 
 int main(int argc, char* argv[]){
     
-    char *userInput[100];   
     int returnCode = 0;
     
+
+    if (argc > 1){
+        int seedNumber;
+
+        if(parseInt(argv[1], &seedNumber) == 3){
+            printf("Usage: ./main [int seedNumber?]");
+            return 1;
+        }
+
+        
+    }
 
     while (!returnCode)
     {

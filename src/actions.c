@@ -36,7 +36,7 @@ int actionSave(){
         storage[arrIndex] = newNode;
     }
     else {
-        addToLinkedList(newNode, arrIndex);
+        saveNode(newNode, arrIndex);
     }
 
     return 0;
