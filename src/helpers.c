@@ -30,7 +30,7 @@ void printStorage(){
     printf("=============================== \n");
 }
 
-void addToLinkedList(Node *newNode, int arrIndex){
+void saveNode(Node *newNode, int arrIndex){
 
     Node *curNode = storage[arrIndex];
 
@@ -127,7 +127,9 @@ int parseInt(char *inputString, int *outputInt){
     }
 
     while (curChar != '\0'){
-        isdigit(curChar);
+        if(!isdigit(curChar)){
+            return 3;
+        };
 
         charIndex++;
         curChar = inputString[charIndex];
