@@ -155,7 +155,7 @@ int generateRandomString(char *outputString, int strLen){
     int prevRandom = 1;
 
 
-    for (i = 0; i < strLen -1; i++){
+    for (i = 0; i < strLen - 1; i++){
         outputString[i] = generateRandomChar(&prevRandom);
     }
     outputString[i] = '\0';
@@ -164,18 +164,19 @@ int generateRandomString(char *outputString, int strLen){
 }
 
 char generateRandomChar(int *prevRandom){
+ 
 
-    time_t currentTime;
+    char randomletter = 'A' + (getRandNum() % 26);
 
-    gmtime(&currentTime);
-
-    currentTime = currentTime**prevRandom*3+245;
-
-    srand(currentTime + time(NULL));
-
-    char randomletter = 'A' + (rand() % 26);
+    printf("%c", randomletter);
 
     return randomletter;
+}
+
+int getRandNum(){
+    *globalSeed = *globalSeed*2%4+13;
+    
+    return (int)globalSeed;
 }
 
 // djb2 hash algorithm
