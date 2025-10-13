@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <time.h>
+
 #include "helpers.h"
 #include "../config.h"
-#include <ctype.h>
-
 
 void printStorage(){    
     
@@ -144,6 +145,35 @@ int parseInt(char *inputString, int *outputInt){
     *outputInt = atoi(inputString); 
 
     return 0;
+}
+
+int generateRandomString(char *outputString, int strLen){
+    int i;
+
+    int prevRandom = 1;
+
+
+    for (i = 0; i < strLen -1; i++){
+        outputString[i] = generateRandomChar(&prevRandom);
+    }
+    outputString[i] = '\0';
+
+    return 0;
+}
+
+char generateRandomChar(int *prevRandom){
+
+    time_t currentTime;
+
+    gmtime(&currentTime);
+
+    currentTime = currentTime**prevRandom*3+245;
+
+    srand(currentTime + time(NULL));
+
+    char randomletter = 'A' + (rand() % 26);
+
+    return randomletter;
 }
 
 // djb2 hash algorithm
