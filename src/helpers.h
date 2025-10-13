@@ -1,7 +1,7 @@
 #include "../config.h"
 
 void printStorage();
-int saveNode(Node *newNode, int arrIndex);
+int saveNode(Node *newNode);
 void freeStorage();
 int getValue(char *key, char *valueStr);
 int getStorageIndex(unsigned char *str);

@@ -29,10 +29,8 @@ int actionSave(){
 
     newNode->next = NULL;
 
-    int arrIndex = getStorageIndex(inputKey);
 
-
-    saveNode(newNode, arrIndex);
+    saveNode(newNode);
     return 0;
 }
 

@@ -31,7 +31,9 @@ void printStorage(){
     printf("=============================== \n");
 }
 
-int saveNode(Node *newNode, int arrIndex){
+int saveNode(Node *newNode){
+
+    int arrIndex = getStorageIndex(newNode->key);
 
     if(storage[arrIndex] == NULL){
         storage[arrIndex] = newNode;
