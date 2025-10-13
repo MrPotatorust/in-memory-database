@@ -7,6 +7,7 @@
 #include "config.h"
 #include "./src/helpers.h"
 #include "./src/actions.h"
+#include "./src/seeder.h"
 
 
 int action();
@@ -25,7 +26,7 @@ int main(int argc, char* argv[]){
             return 1;
         }
 
-        
+        seedStorage(seedNumber);
     }
 
     while (!returnCode)
