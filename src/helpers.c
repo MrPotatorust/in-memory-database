@@ -164,7 +164,7 @@ int generateRandomString(char *outputString, int strLen){
 }
 
 char generateRandomChar(int *prevRandom){
-    char randomletter = 'A' + (rand() % 26);
+    char randomletter = 'a' + (rand() % 26);
 
     return randomletter;
 }
