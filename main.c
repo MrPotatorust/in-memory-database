@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
 #include <ctype.h>
 #include <time.h>
 
@@ -59,7 +58,7 @@ int action(){
         actionSave();
         break;
     case 'e':
-        return 1;
+        return 0;
     case 'p':
         printStorage();
         break;

@@ -7,17 +7,21 @@
 #include "helpers.h"
 #include "../config.h"
 
-void printStorage(){    
-    
+void printStorage()
+{
+
     printf("=============================== \n");
-    for (int i = 0; i < STORAGE_SZ; i++ ){
+    for (int i = 0; i < STORAGE_SZ; i++)
+    {
 
         Node *curNode = storage[i];
 
-        if(curNode != NULL){
+        if (curNode != NULL)
+        {
             printf("------------------------ \n");
             printf("%s, %s\n", curNode->key, curNode->value);
-            if (curNode->next != NULL){
+            if (curNode->next != NULL)
+            {
                 while (curNode->next != NULL)
                 {
                     curNode = curNode->next;
@@ -25,17 +29,19 @@ void printStorage(){
                     printf("->");
                     printf(" %s, %s\n", curNode->key, curNode->value);
                 }
-            }            
+            }
         }
     }
     printf("=============================== \n");
 }
 
-int saveNode(Node *newNode){
+int saveNode(Node *newNode)
+{
 
     int arrIndex = getStorageIndex(newNode->key);
 
-    if(storage[arrIndex] == NULL){
+    if (storage[arrIndex] == NULL)
+    {
         storage[arrIndex] = newNode;
         return 0;
     }
@@ -46,31 +52,45 @@ int saveNode(Node *newNode){
     {
         curNode = curNode->next;
     }
+
+    printf("%i, %s, %s \n", !strcmp(curNode->key, newNode->key), curNode->key, newNode->key);
+    if (!strcmp(curNode->key, newNode->key))
+    {
+        printf("A Node with this key already exists. This action will overwrite it. \n");
+        if (!getConfirmation())
+        {
+            return 1;
+        }
+    }
+
     curNode->next = newNode;
-    
+
     return 0;
 }
 
-void freeStorage(){
+void freeStorage()
+{
 
     Node *curNode;
     Node *nextNode;
 
-    for (int i = 0; i < STORAGE_SZ; i++ ){
-        if(storage[i] != NULL){
-            if (storage[i]->next != NULL){
-                
+    for (int i = 0; i < STORAGE_SZ; i++)
+    {
+        if (storage[i] != NULL)
+        {
+            if (storage[i]->next != NULL)
+            {
+
                 curNode = storage[i];
-                
+
                 while (curNode->next != NULL)
                 {
                     nextNode = curNode->next;
-                    
+
                     free(curNode);
                     curNode = NULL;
                     curNode = nextNode;
-
-                }                
+                }
             }
 
             free(storage[i]);
@@ -79,22 +99,26 @@ void freeStorage(){
     }
 }
 
-int getValue(char *key, char *valueStr){
+int getValue(char *key, char *valueStr)
+{
 
     Node *curNode = storage[getStorageIndex(key)];
 
-    if (curNode == NULL){
+    if (curNode == NULL)
+    {
         return 1;
     }
 
-    if(!strcmp(curNode->key, key)){
+    if (!strcmp(curNode->key, key))
+    {
         strcpy(valueStr, curNode->value);
         return 0;
     }
 
     while (strcmp(curNode->key, key))
     {
-        if(curNode->next != NULL){
+        if (curNode->next != NULL)
+        {
             break;
         }
         curNode = curNode->next;
@@ -104,11 +128,13 @@ int getValue(char *key, char *valueStr){
     return 0;
 }
 
-int getStorageIndex(unsigned char *str){
+int getStorageIndex(unsigned char *str)
+{
     return hash(str) % STORAGE_SZ;
 }
 
-int getString(char *outputStr){
+int getString(char *outputStr)
+{
     char userInput[USER_INPUT_SZ];
 
     fgets(userInput, sizeof(userInput), stdin);
@@ -117,26 +143,51 @@ int getString(char *outputStr){
     strcpy(outputStr, userInput);
 
     return 0;
-} 
+}
 
-// This can be written simpler with a for loop but I wanted to try it with a for loop 
-int parseInt(char *inputString, int *outputInt){
+char getChar()
+{
+    char *userInput;
 
-    if(inputString == NULL || outputInt == NULL){
+    fgets(userInput, sizeof(userInput), stdin);
+
+    return *userInput;
+}
+
+int getConfirmation()
+{
+    printf("Are you sure? (y/n)");
+    if (getChar() == 'y')
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+// This can be written simpler with a for loop but I wanted to try it with a for loop
+int parseInt(char *inputString, int *outputInt)
+{
+
+    if (inputString == NULL || outputInt == NULL)
+    {
         printf("Tried to pass NULL pointer/s into parseInt(). \n");
         return 1;
     }
 
     int charIndex = 0;
     char curChar = inputString[charIndex];
-    
-    if(curChar == '\0'){
+
+    if (curChar == '\0')
+    {
         printf("First char is nul in parseInt(). \n");
         return 1;
     }
 
-    while (curChar != '\0'){
-        if(!isdigit(curChar)){
+    while (curChar != '\0')
+    {
+        if (!isdigit(curChar))
+        {
             return 3;
         };
 
@@ -144,18 +195,19 @@ int parseInt(char *inputString, int *outputInt){
         curChar = inputString[charIndex];
     }
 
-    *outputInt = atoi(inputString); 
+    *outputInt = atoi(inputString);
 
     return 0;
 }
 
-int generateRandomString(char *outputString, int strLen){
+int generateRandomString(char *outputString, int strLen)
+{
     int i;
 
     int prevRandom = 1;
 
-
-    for (i = 0; i < strLen - 1; i++){
+    for (i = 0; i < strLen - 1; i++)
+    {
         outputString[i] = generateRandomChar(&prevRandom);
     }
     outputString[i] = '\0';
@@ -163,7 +215,8 @@ int generateRandomString(char *outputString, int strLen){
     return 0;
 }
 
-char generateRandomChar(int *prevRandom){
+char generateRandomChar(int *prevRandom)
+{
     char randomletter = 'a' + (rand() % 26);
 
     return randomletter;

@@ -6,6 +6,9 @@
 #define VALUE_SZ 100
 #define USER_INPUT_SZ 100
 
+// Settings
+#define DANGER_MODE 0
+
 typedef struct Node
 {
     struct Node *next;
