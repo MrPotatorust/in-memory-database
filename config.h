@@ -15,6 +15,5 @@ typedef struct Node
 
 
 extern Node *storage[STORAGE_SZ];
-extern long long int *globalSeed;
 
 #endif

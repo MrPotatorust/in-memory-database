@@ -9,5 +9,4 @@ int getString(char *outputStr);
 int parseInt(char *inputString, int *outputInt);
 int generateRandomString(char *outputString, int strLen);
 char generateRandomChar(int *prevRandom);
-int getRandNum();
 unsigned long hash(unsigned char *str);

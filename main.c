@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <time.h>
 
 #include "config.h"
 #include "./src/helpers.h"
@@ -14,6 +15,8 @@ int action();
 
 
 int main(int argc, char* argv[]){
+
+    srand(time(NULL));
     
     int returnCode = 0;
     

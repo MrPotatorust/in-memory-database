@@ -165,18 +165,11 @@ int generateRandomString(char *outputString, int strLen){
 
 char generateRandomChar(int *prevRandom){
  
-
-    char randomletter = 'A' + (getRandNum() % 26);
+    char randomletter = 'A' + (rand() % 26);
 
     printf("%c", randomletter);
 
     return randomletter;
-}
-
-int getRandNum(){
-    *globalSeed = *globalSeed*2%4+13;
-    
-    return (int)globalSeed;
 }
 
 // djb2 hash algorithm
