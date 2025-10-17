@@ -149,14 +149,15 @@ char getChar()
 {
     char *userInput;
 
-    fgets(userInput, sizeof(userInput), stdin);
+    fgets(userInput, 1, stdin);
 
+    printf("%c", *userInput);
     return *userInput;
 }
 
 int getConfirmation()
 {
-    printf("Are you sure? (y/n)");
+    printf("Are you sure? (y/n) ");
     if (getChar() == 'y')
     {
         return 1;
