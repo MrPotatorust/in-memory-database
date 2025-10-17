@@ -147,12 +147,11 @@ int getString(char *outputStr)
 
 char getChar()
 {
-    char *userInput;
+    char userInput[3];
 
-    fgets(userInput, 1, stdin);
+    fgets(userInput, sizeof(userInput), stdin);
 
-    printf("%c", *userInput);
-    return *userInput;
+    return userInput[0];
 }
 
 int getConfirmation()
