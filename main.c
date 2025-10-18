@@ -8,6 +8,7 @@
 #include "./src/helpers.h"
 #include "./src/actions.h"
 #include "./src/seeder.h"
+#include "config_parser.h"
 
 
 int action();
@@ -64,6 +65,8 @@ int action(){
         break;
     case 'g':
         actionGetValue();
+    case 'c':
+        parse();
     default:
         break;
     }

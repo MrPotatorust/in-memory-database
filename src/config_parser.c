@@ -1,15 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <config_parser.h>
 
 char configPath[] = "../config.json";
 
-struct config
-{
-    char key[30];
-    char value[30];
-};
-
+configItem config[1000];
 
 int parse(){
     FILE *configFile = fopen(configPath, "r");
@@ -37,6 +33,10 @@ int parse(){
 
         if (inBrackets){
             printf("%c \n", buffer);
+            curVal
+        }
+        else {
+
         }
         
     }
