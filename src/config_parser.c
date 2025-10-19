@@ -33,7 +33,6 @@ int parse(){
 
         if (inBrackets){
             printf("%c \n", buffer);
-            curVal
         }
         else {
 
