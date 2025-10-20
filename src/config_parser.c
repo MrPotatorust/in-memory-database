@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include "config_parser.h"
 
 char configPath[] = "config.json";
@@ -20,13 +21,15 @@ int parse(){
     char bufferLine[30];
 
 
-    while (true)
+    while (fgets(bufferLine, 30, configFile))
     {
         // fread(&buffer, sizeof(buffer), 1, configFile);
-        fgets(bufferLine, 30, configFile);
-        
+
+        printf("%s", bufferLine);
 
     }
+
+    printf("\n");
     return 0;   
 }
 

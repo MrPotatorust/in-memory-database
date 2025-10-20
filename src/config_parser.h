@@ -1,13 +1,21 @@
+#include <stdbool.h>
+
+#ifndef CONFIG_PARSER 
+#define CONFIG_PARSER
+union configValue {
+    int number;
+    bool boolean;
+    char string[30];
+} configValue;
 
 typedef struct configItem
 {
     char key[30];
-    char value[30];
 
-
-    // 0 = string, 1 = int, 2 = float, 3 = bool
-    int dataType;
 } configItem;
 
 
+
 int parse();
+
+#endif

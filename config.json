@@ -1,3 +1,5 @@
 {
-  "funny": "note"
+  "funny": "note",
+  "serious": true,
+  "items": 1234567
 }
