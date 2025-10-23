@@ -2,37 +2,67 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <string.h>
 #include "config_parser.h"
 
 char configPath[] = "config.json";
 
 configItem config[1000];
 
-int parse(){
+int parse()
+{
     FILE *configFile = fopen(configPath, "r");
 
-    if(configFile == NULL){
+    if (configFile == NULL)
+    {
         printf("The config file could not be opened, check that its located in the root of the project. \n");
         return 1;
     }
 
     char buffer;
-    
-    char bufferLine[30];
 
+    char bufferLine[MAX_CONFIG_LINE_SZ];
 
-    while (fgets(bufferLine, 30, configFile))
+    configItem curConfigItem;
+
+    while (fgets(bufferLine, MAX_CONFIG_LINE_SZ, configFile))
     {
-        // fread(&buffer, sizeof(buffer), 1, configFile);
-
-        printf("%s", bufferLine);
-
+        char **bufferConfig = splitLines(bufferLine);
+        printf("%s, %s \n", bufferConfig[0], bufferConfig[1]);
     }
 
     printf("\n");
-    return 0;   
+    return 0;
 }
 
-void splitLines(){
+// returns returnArr[2] first one is a key, second one is the value
+char **splitLines(char *bufferLine)
+{
+
+    char *res = strtok(bufferLine, ":");
+
+    char *key = malloc(sizeof(char) * CONFIG_STRING_SZ);
+    char *value = malloc(sizeof(char) * CONFIG_STRING_SZ);
+
+    if(res){
+        strcpy(key, res);
+    }
+
+    while (res != NULL)
+    {        
+        strcpy(value, res);
+        res = strtok(NULL, ":");
+    }
+
+    char **returnArr = malloc(sizeof(char*) * 2);
+
+    returnArr[0] = key;
+    returnArr[1] = value;
     
+    return returnArr;
+}
+
+// Expects values[2]
+configItem sterilizeConfig(char**values){
+
 }

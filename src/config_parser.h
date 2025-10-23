@@ -1,13 +1,16 @@
 #include <stdbool.h>
+#define CONFIG_STRING_SZ 30
+#define MAX_CONFIG_LINE_SZ 65
 
 #ifndef CONFIG_PARSER
 #define CONFIG_PARSER
+
 union configValue
 {
     int integer;
     bool boolean;
-    char string[30];
-} configValue;
+    char *string[CONFIG_STRING_SZ];
+};
 
 enum valueType
 {
@@ -18,7 +21,7 @@ enum valueType
 
 typedef struct configItem
 {
-    char key[30];
+    char key[CONFIG_STRING_SZ];
 
     enum valueType valueType;
 
@@ -27,5 +30,7 @@ typedef struct configItem
 } configItem;
 
 int parse();
+char **splitLines(char *bufferLine);
+configItem sterilizeConfig(char **values)
 
 #endif
