@@ -28,10 +28,10 @@ int parse()
     while (fgets(bufferLine, MAX_CONFIG_LINE_SZ, configFile))
     {
         char **bufferConfig = splitLines(bufferLine);
-        printf("%s, %s \n", bufferConfig[0], bufferConfig[1]);
+        // printf("%s, %s \n", bufferConfig[0], bufferConfig[1]);
+        sterilizeConfig(bufferConfig);
     }
 
-    printf("\n");
     return 0;
 }
 
@@ -64,5 +64,31 @@ char **splitLines(char *bufferLine)
 
 // Expects values[2]
 configItem sterilizeConfig(char**values){
+    char key[CONFIG_STRING_SZ];
+    char value[CONFIG_STRING_SZ];
 
+    if(value[0] == '{'){
+        printf("TEST \n");
+        // strcpy(key+1, values[0]);
+    }
+    else {
+        printf("%c \n", *values[0]);
+        // strcpy(key, values[0]);
+    }
+    
+    // if(value[1] == '{'){
+    //     strcpy(key, values[0]);
+    // }
+    // else {
+    //     strcpy(key, values[0]);
+    // }
+
+    // strcpy(value, values[1]);
+
+    // for (int i; i < strlen(key); i++){
+
+    // }
+    
+    // printf("%s, %s \n",key, value);
+    // printf("%c, %c \n",key[0], value[0]);
 }
