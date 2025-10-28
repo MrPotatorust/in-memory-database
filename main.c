@@ -44,12 +44,8 @@ int main(int argc, char* argv[]){
 
 int action(){
 
-    char inputActionStr[20];
+    char *inputActionStr = getString("ACTION: ");
     char inputAction;
-    
-    printf("ACTION: ");
-    fgets(inputActionStr, sizeof(inputActionStr), stdin);
-    inputActionStr[strcspn(inputActionStr, "\n")] = 0;
 
     inputAction = inputActionStr[0];
     

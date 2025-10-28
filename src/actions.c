@@ -32,6 +32,10 @@ int actionSave(){
 
 
     saveNode(newNode);
+
+    free(inputKey);
+    free(inputValue);
+
     return 0;
 }
 
@@ -60,11 +64,13 @@ int actionGetValue(){
 
 int actionDelete(){
 
-    char keyStr[KEY_SZ];
+    char *keyStr = getString("KEY: ");
 
-    printf("KEY: ");
-    fgets(keyStr, sizeof(keyStr), stdin);
-    keyStr[strcspn(keyStr, "\n")] = 0;
+    if(strlen(keyStr) > KEY_SZ){
+        printf("The provided key is too big \n");
+        return 1;
+    }
+
 
     char value[VALUE_SZ];
     int valueCode = getValue(keyStr, value);
@@ -75,6 +81,8 @@ int actionDelete(){
     else {
         printf("Could not find the desired value. \n");
     }
+
+    free(keyStr);
     
     return 0;
 }
