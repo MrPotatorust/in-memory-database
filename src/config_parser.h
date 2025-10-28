@@ -32,5 +32,6 @@ typedef struct configItem
 int parse();
 char **splitLines(char *bufferLine);
 configItem sterilizeConfig(char **values);
+char *trimString(char *originalString);
 
 #endif

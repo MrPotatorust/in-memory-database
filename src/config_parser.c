@@ -67,28 +67,45 @@ configItem sterilizeConfig(char**values){
     char key[CONFIG_STRING_SZ];
     char value[CONFIG_STRING_SZ];
 
-    if(value[0] == '{'){
-        printf("TEST \n");
-        // strcpy(key+1, values[0]);
+    strcpy(key, values[0]);
+    strcpy(value, values[0]);
+
+    trimString(values[0]);
+    trimString(values[1]);
+}
+
+char *trimString(char *originalString){
+    
+    if(originalString == NULL || originalString[0] == '\0') {
+        return NULL;
+    }
+    
+    // char *newString = malloc(sizeof(char) * CONFIG_STRING_SZ);
+    char *newString = malloc(sizeof(char) * CONFIG_STRING_SZ);
+
+    int index = 0;
+    int lastLetter = 0;
+    int newStringIndex = 0;
+
+    while (*(originalString+index) != '\0' || index > CONFIG_STRING_SZ)
+    {
+        // printf("%c \n", *(originalString+index));
+        if (lastLetter || !isspace(*(originalString+index))){
+            newString[newStringIndex] = *(originalString+index);
+            newStringIndex++;
+        }
+        if(!isspace(*(originalString+index))){
+            lastLetter = newStringIndex;
+        }
+
+        index++;
+    }   
+    if (lastLetter){
+        newString[lastLetter] = '\0';
     }
     else {
-        printf("%c \n", *values[0]);
-        // strcpy(key, values[0]);
+        newString[newStringIndex+1] = '\0';
     }
-    
-    // if(value[1] == '{'){
-    //     strcpy(key, values[0]);
-    // }
-    // else {
-    //     strcpy(key, values[0]);
-    // }
 
-    // strcpy(value, values[1]);
-
-    // for (int i; i < strlen(key); i++){
-
-    // }
-    
-    // printf("%s, %s \n",key, value);
-    // printf("%c, %c \n",key[0], value[0]);
+    return newString;
 }
