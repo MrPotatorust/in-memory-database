@@ -136,16 +136,16 @@ int getStorageIndex(unsigned char *str)
     return hash(str) % STORAGE_SZ;
 }
 
-int getString(char *outputStr)
+char *getString(char prompt[])
 {
-    char userInput[USER_INPUT_SZ];
+    printf("%s", prompt);
+
+    char *userInput = malloc(sizeof(char) * USER_INPUT_SZ);
 
     fgets(userInput, sizeof(userInput), stdin);
     userInput[strcspn(userInput, "\n")] = 0;
 
-    strcpy(outputStr, userInput);
-
-    return 0;
+    return userInput;
 }
 
 char getChar()

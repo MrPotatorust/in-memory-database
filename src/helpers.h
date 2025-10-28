@@ -5,7 +5,7 @@ int saveNode(Node *newNode);
 void freeStorage();
 int getValue(char *key, char *valueStr);
 int getStorageIndex(unsigned char *str);
-int getString(char *outputStr);
+char *getString(char prompt[]);
 char getChar();
 // Returns 1 if true and logs Are you sure? to the console
 int getConfirmation();
