@@ -89,7 +89,6 @@ char *trimString(char *originalString){
 
     while (*(originalString+index) != '\0' || index > CONFIG_STRING_SZ)
     {
-        // printf("%c \n", *(originalString+index));
         if (lastLetter || !isspace(*(originalString+index))){
             newString[newStringIndex] = *(originalString+index);
             newStringIndex++;

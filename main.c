@@ -61,8 +61,13 @@ int action(){
         break;
     case 'g':
         actionGetValue();
+        break;
     case 'c':
         parse();
+        break;
+    case 'd':
+        actionDelete();
+        break;
     default:
         break;
     }

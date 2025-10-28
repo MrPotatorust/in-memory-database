@@ -71,18 +71,16 @@ int actionDelete(){
         return 1;
     }
 
+    int deleteCode = deleteNode(keyStr);
 
-    char value[VALUE_SZ];
-    int valueCode = getValue(keyStr, value);
-
-    if (value && !valueCode){
-        printf("%s \n", value);
-    } 
+    if(!deleteCode){
+        printf("Successfully deleted node. \n");
+    }
     else {
-        printf("Could not find the desired value. \n");
+        printf("Could not delete node. \n");
     }
 
     free(keyStr);
-    
+
     return 0;
 }

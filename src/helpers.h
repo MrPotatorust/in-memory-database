@@ -2,6 +2,7 @@
 
 void printStorage();
 int saveNode(Node *newNode);
+int deleteNode(char *key);
 void freeStorage();
 int getValue(char *key, char *valueStr);
 int getStorageIndex(unsigned char *str);

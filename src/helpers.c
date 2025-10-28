@@ -104,8 +104,8 @@ void freeStorage()
 
 int getValue(char *key, char *valueStr)
 {
-
-    Node *curNode = storage[getStorageIndex(key)];
+    int index = getStorageIndex(key);
+    Node *curNode = storage[index];
 
     if (curNode == NULL)
     {
@@ -118,16 +118,47 @@ int getValue(char *key, char *valueStr)
         return 0;
     }
 
-    while (strcmp(curNode->key, key))
+    while (strcmp(curNode->key, key) && curNode->next != NULL)
     {
-        if (curNode->next != NULL)
-        {
-            break;
-        }
         curNode = curNode->next;
     }
 
     strcpy(valueStr, curNode->value);
+    return 0;
+}
+
+int deleteNode(char *key)
+{
+    int index = getStorageIndex(key);
+    Node *curNode = storage[index];
+    Node *prevNode = NULL;
+
+    if (curNode == NULL)
+    {
+        return 1;
+    }
+
+    while (curNode != NULL && strcmp(curNode->key, key))
+    {
+        prevNode = curNode;
+        curNode = curNode->next;
+    }
+
+    if (curNode == NULL)
+    {
+        return 1;
+    }
+
+    if (prevNode == NULL)
+    {
+        storage[index] = curNode->next;
+    }
+    else
+    {
+        prevNode->next = curNode->next;
+    }
+
+    free(curNode);
     return 0;
 }
 
