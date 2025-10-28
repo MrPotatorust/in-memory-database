@@ -5,15 +5,16 @@
 #include "helpers.h"
 
 int actionSave(){
-    char inputKey[KEY_SZ];
-    char inputValue[VALUE_SZ];
-
-    printf("Key: ");
-    fgets(inputKey, sizeof(inputKey), stdin);
-    inputKey[strcspn(inputKey, "\n")] = 0;
-    printf("Value: ");
-    fgets(inputValue, sizeof(inputValue), stdin);
-    inputValue[strcspn(inputValue, "\n")] = 0;
+    char *inputKey = getString("Key: ");
+    if(strlen(inputKey) > KEY_SZ){
+        printf("The provided key is too big \n");
+        return 1;
+    }
+    char *inputValue = getString("Value: ");
+    if(strlen(inputValue) > VALUE_SZ){
+        printf("The provided value is too big \n");
+        return 1;
+    }
 
     if(!inputKey || !inputValue){
         return 1;
@@ -35,6 +36,29 @@ int actionSave(){
 }
 
 int actionGetValue(){
+
+    
+    char *keyStr = getString("KEY: ");
+
+    if(strlen(keyStr) > KEY_SZ){
+        printf("The provided key is too big \n");
+        return 1;
+    }
+
+    char value[VALUE_SZ];
+    int valueCode = getValue(keyStr, value);
+
+    if (value && !valueCode){
+        printf("%s \n", value);
+    } 
+    else {
+        printf("Could not find the desired value. \n");
+    }
+    
+    return 0;
+}
+
+int actionDelete(){
 
     char keyStr[KEY_SZ];
 
