@@ -39,7 +39,7 @@ Once running, the program presents an interactive menu:
 | `g`     | **Get** - Retrieve a value by key         |
 | `d`     | **Delete** - Remove a key-value pair      |
 | `p`     | **Print** - Display all stored data       |
-| `c`     | **Config** - Parse config.json file       |
+| `c`     | **Config** - Parse config.json file WIP   |
 | `e`     | **Exit** - Close the program              |
 
 **Example Session:**
@@ -103,7 +103,7 @@ typedef struct Node {
 
 - `seedStorage(int count)` - Generate random key-value pairs for testing
 
-#### 5. **Config Parser** (`config_parser.c`)
+#### 5. **Config Parser** (`config_parser.c`) WIP
 
 - `parse()` - Parse config.json file
 - `trimString()` - Remove whitespace from strings
