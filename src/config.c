@@ -1,5 +1,7 @@
 #include "config.h"
+#include "config_parser.h"
 
-struct config initConfig(){
-    parse()
+config initConfig()
+{
+    parsedConfig *parsedConfig = parse();
 }

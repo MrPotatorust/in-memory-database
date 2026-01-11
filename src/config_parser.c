@@ -6,9 +6,14 @@
 
 char configPath[] = "config.json";
 
-configItem *parse()
+parsedConfig *parse()
 {
-    configItem *config = malloc(sizeof(configItem) * MAX_CONFIG_LINES);
+    configItem *configItems = malloc(sizeof(configItem) * MAX_CONFIG_LINES);
+
+    parsedConfig *config = malloc(sizeof(parsedConfig));
+
+    config->numOfItems = MAX_CONFIG_LINES;
+    config->configItems = configItems;
 
     FILE *configFile = fopen(configPath, "r");
 
@@ -22,7 +27,7 @@ configItem *parse()
 
     char bufferLine[MAX_CONFIG_LINE_SZ];
 
-    configItem *iter = config;
+    int size = 0;
 
     while (fgets(bufferLine, MAX_CONFIG_LINE_SZ, configFile))
     {
@@ -32,9 +37,11 @@ configItem *parse()
         {
             configItem *item = malloc(sizeof(configItem));
             *item = parseConfigItem(bufferConfig);
-            iter = item;
 
-            iter++;
+            // Assigns the next config item to the config array (Note to self)
+            config->configItems[size] = *item;
+
+            size++;
         }
 
         free(bufferConfig[0]);
@@ -43,7 +50,9 @@ configItem *parse()
         bufferConfig = NULL;
     }
 
-    return NULL;
+    config->numOfItems = size;
+
+    return config;
 }
 
 // returns returnArr[2] first one is a key, second one is the value

@@ -1,16 +1,42 @@
-#include "config_parser.h"
+#include <stdbool.h>
 
 #ifndef CONFIG
 #define CONFIG
 
-struct config
+#define CONFIG_STRING_SZ 30
+#define MAX_CONFIG_LINE_SZ 65
+#define MAX_CONFIG_LINES 30
+
+union configValue
+{
+    int integer;
+    bool boolean;
+    char string[CONFIG_STRING_SZ];
+};
+
+enum valueType
+{
+    integer,
+    boolean,
+    string
+};
+
+typedef struct configItem
+{
+    char key[CONFIG_STRING_SZ];
+
+    enum valueType valueType;
+
+    union configValue value;
+
+} configItem;
+
+typedef struct config
 {
     configItem *items;
     int itemNum;
-};
+} config;
 
-struct config initConfig();
-
-
+config initConfig();
 
 #endif
