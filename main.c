@@ -8,7 +8,6 @@
 #include "./src/helpers.h"
 #include "./src/actions.h"
 #include "./src/seeder.h"
-#include "./src/config_parser.h"
 #include "./src/config.h"
 
 int action();
@@ -18,7 +17,7 @@ int main(int argc, char *argv[])
 
     srand(time(NULL));
 
-    ConfigT const config = initConfig();
+    configT const *config = initConfig();
 
     int returnCode = 0;
 
@@ -65,9 +64,6 @@ int action()
         break;
     case 'g':
         actionGetValue();
-        break;
-    case 'c':
-        parse();
         break;
     case 'd':
         actionDelete();

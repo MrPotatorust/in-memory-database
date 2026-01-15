@@ -31,14 +31,18 @@ typedef struct configItem
 
 } configItem;
 
-typedef struct config
+typedef struct configT
 {
     configItem *items;
     int itemNum;
-} ConfigT;
+} configT;
 
-ConfigT initConfig();
-
-union configValue getFromConfig(ConfigT config, char *key);
+configT *initConfig();
+char **splitLines(char *bufferLine);
+configItem parseConfigItem(char **values);
+char *trimString(char *originalString);
+bool areCurlyBraces(char **values);
+char *stripTags(char *string);
+union configValue getFromConfig(configT config, char *key);
 
 #endif
