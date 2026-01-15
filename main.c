@@ -9,22 +9,25 @@
 #include "./src/actions.h"
 #include "./src/seeder.h"
 #include "./src/config_parser.h"
-
+#include "./src/config.h"
 
 int action();
 
-
-int main(int argc, char* argv[]){
+int main(int argc, char *argv[])
+{
 
     srand(time(NULL));
-    
-    int returnCode = 0;
-    
 
-    if (argc > 1){
+    ConfigT const config = initConfig();
+
+    int returnCode = 0;
+
+    if (argc > 1)
+    {
         int seedNumber;
 
-        if(parseInt(argv[1], &seedNumber) == 3){
+        if (parseInt(argv[1], &seedNumber) == 3)
+        {
             printf("Usage: ./main [int seedNumber?]");
             return 1;
         }
@@ -36,19 +39,20 @@ int main(int argc, char* argv[]){
     {
         returnCode = action();
     }
-    
+
     freeStorage();
-    
+
     return 0;
 }
 
-int action(){
+int action()
+{
 
     char *inputActionStr = getString("ACTION: ");
     char inputAction;
 
     inputAction = inputActionStr[0];
-    
+
     switch (inputAction)
     {
     case 's':

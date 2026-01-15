@@ -35,8 +35,10 @@ typedef struct config
 {
     configItem *items;
     int itemNum;
-} config;
+} ConfigT;
 
-config initConfig();
+ConfigT initConfig();
+
+union configValue getFromConfig(ConfigT config, char *key);
 
 #endif
