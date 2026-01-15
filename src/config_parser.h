@@ -4,13 +4,13 @@
 #ifndef CONFIG_PARSER
 #define CONFIG_PARSER
 
-typedef struct parsedConfig
+typedef struct parsedConfigT
 {
     int numOfItems;
     configItem *configItems;
-} parsedConfig;
+} parsedConfigT;
 
-parsedConfig *parse();
+parsedConfigT *parse();
 char **splitLines(char *bufferLine);
 configItem parseConfigItem(char **values);
 char *trimString(char *originalString);

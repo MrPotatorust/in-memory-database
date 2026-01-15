@@ -6,11 +6,11 @@
 
 char configPath[] = "config.json";
 
-parsedConfig *parse()
+parsedConfigT *parse()
 {
     configItem *configItems = malloc(sizeof(configItem) * MAX_CONFIG_LINES);
 
-    parsedConfig *config = malloc(sizeof(parsedConfig));
+    parsedConfigT *config = malloc(sizeof(parsedConfigT));
 
     config->numOfItems = MAX_CONFIG_LINES;
     config->configItems = configItems;

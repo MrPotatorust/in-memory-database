@@ -3,9 +3,11 @@
 
 ConfigT initConfig()
 {
-    parsedConfig *parsedConfig = parse();
+    parsedConfigT *parsedConfig = parse();
+
 }
 
 union configValue getFromConfig(ConfigT config, char *key)
 {
+
 }
