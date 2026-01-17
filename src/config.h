@@ -43,6 +43,6 @@ configItem parseConfigItem(char **values);
 char *trimString(char *originalString);
 bool areCurlyBraces(char **values);
 char *stripTags(char *string);
-union configValue getFromConfig(configT config, char *key);
+union configValue getFromConfig(configT *config, char *key);
 
 #endif
