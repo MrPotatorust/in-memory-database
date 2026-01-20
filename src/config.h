@@ -42,7 +42,7 @@ char **splitLines(char *bufferLine);
 configItem parseConfigItem(char **values);
 char *trimString(char *originalString);
 bool areCurlyBraces(char **values);
-char *stripTags(char *string);
+char *stripTags(char *srcString);
 union configValue getFromConfig(configT *config, char *key);
 
 #endif

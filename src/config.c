@@ -23,8 +23,6 @@ configT *initConfig()
         return NULL;
     }
 
-    char buffer;
-
     char bufferLine[MAX_CONFIG_LINE_SZ];
 
     int size = 0;
@@ -88,8 +86,6 @@ configItem parseConfigItem(char **values)
 {
     char *key = malloc(sizeof(char) * CONFIG_STRING_SZ);
     char *value = malloc(sizeof(char) * CONFIG_STRING_SZ);
-
-    enum valueType type;
 
     strcpy(key, values[0]);
     strcpy(value, values[0]);
@@ -168,7 +164,7 @@ bool areCurlyBraces(char **values)
     return false;
 }
 
-char *stripTags(char *string)
+char *stripTags(char *srcString)
 {
     char *newString = malloc(sizeof(char) * CONFIG_STRING_SZ);
 
@@ -179,14 +175,14 @@ char *stripTags(char *string)
 
     char *iter = newString;
 
-    while (*string != '\0')
+    while (*srcString != '\0')
     {
-        if ((*string) != '"')
+        if ((*srcString) != '"')
         {
-            *iter = *string;
+            *iter = *srcString;
             iter++;
         }
-        string++;
+        srcString++;
     }
 
     *iter = '\0';

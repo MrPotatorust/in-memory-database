@@ -49,10 +49,9 @@ int actionGetValue(){
         return 1;
     }
 
-    char value[VALUE_SZ];
-    int valueCode = getValue(keyStr, value);
+    char *value = getValue(keyStr);
 
-    if (value && !valueCode){
+    if (value != NULL){
         printf("%s \n", value);
     } 
     else {

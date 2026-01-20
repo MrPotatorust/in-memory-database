@@ -81,7 +81,7 @@ typedef struct Node {
 #### 1. **Storage Management** (`helpers.c`)
 
 - `saveNode(Node *newNode)` - Insert or update a node
-- `getValue(char *key, char *valueStr)` - Retrieve a value
+- `getValue(char *key)` - Retrieve a value
 - `deleteNode(char *key)` - Remove a node
 - `getStorageIndex(char *str)` - Calculate hash table index
 - `hash(char *str)` - DJB2 hash algorithm

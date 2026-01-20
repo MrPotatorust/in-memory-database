@@ -38,7 +38,7 @@ void printStorage()
 int saveNode(Node *newNode)
 {
 
-    int arrIndex = getStorageIndex(newNode->key);
+    long unsigned int arrIndex = getStorageIndex(newNode->key);
 
     if (storage[arrIndex] == NULL)
     {
@@ -97,25 +97,33 @@ void freeStorage()
             }
 
             free(storage[i]);
-            storage[i] == NULL;
+            storage[i] = NULL;
         }
     }
 }
 
-int getValue(char *key, char *valueStr)
+char *getValue(char *key)
 {
-    int index = getStorageIndex(key);
+
+    char *valueStr = malloc(sizeof(char) * VALUE_SZ);
+
+    if (valueStr == NULL)
+    {
+        return NULL;
+    }
+
+    long unsigned int index = getStorageIndex(key);
     Node *curNode = storage[index];
 
     if (curNode == NULL)
     {
-        return 1;
+        return NULL;
     }
 
     if (!strcmp(curNode->key, key))
     {
         strcpy(valueStr, curNode->value);
-        return 0;
+        return NULL;
     }
 
     while (strcmp(curNode->key, key) && curNode->next != NULL)
@@ -124,12 +132,12 @@ int getValue(char *key, char *valueStr)
     }
 
     strcpy(valueStr, curNode->value);
-    return 0;
+    return valueStr;
 }
 
 int deleteNode(char *key)
 {
-    int index = getStorageIndex(key);
+    long unsigned int index = getStorageIndex(key);
     Node *curNode = storage[index];
     Node *prevNode = NULL;
 
@@ -162,9 +170,9 @@ int deleteNode(char *key)
     return 0;
 }
 
-int getStorageIndex(unsigned char *str)
+long unsigned int getStorageIndex(char *str)
 {
-    return hash(str) % STORAGE_SZ;
+    return hash((unsigned char *)str) % STORAGE_SZ;
 }
 
 char *getString(char prompt[])
@@ -249,9 +257,10 @@ int generateRandomString(char *outputString, int strLen)
     return 0;
 }
 
-char generateRandomChar(int *prevRandom)
+char generateRandomChar()
 {
-    char randomletter = 'a' + (rand() % 26);
+    int offset = rand() % 26;
+    char randomletter = (char)('a' + offset);
 
     return randomletter;
 }
@@ -260,9 +269,9 @@ char generateRandomChar(int *prevRandom)
 unsigned long hash(unsigned char *str)
 {
     unsigned long hash = 5381;
-    int c;
+    unsigned long c;
 
-    while (c = *str++)
+    while ((c = *str++))
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
     return hash;

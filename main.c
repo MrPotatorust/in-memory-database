@@ -15,11 +15,10 @@ int action();
 int main(int argc, char *argv[])
 {
 
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
 
-    configT *config = initConfig();
-
-    printf("test" getFromConfig(config, "fun"));
+    // configT *config = initConfig();
+    // printf("test" getFromConfig(config, "fun"));
 
     int returnCode = 0;
 
