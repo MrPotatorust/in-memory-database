@@ -181,7 +181,7 @@ char *getString(char prompt[])
 
     char *userInput = malloc(sizeof(char) * USER_INPUT_SZ);
 
-    fgets(userInput, sizeof(userInput), stdin);
+    fgets(userInput, USER_INPUT_SZ, stdin);
     userInput[strcspn(userInput, "\n")] = 0;
 
     return userInput;
@@ -222,7 +222,7 @@ int parseInt(char *inputString, int *outputInt)
 
     if (curChar == '\0')
     {
-        printf("First char is nul in parseInt(). \n");
+        printf("First char is null in parseInt(). \n");
         return 1;
     }
 

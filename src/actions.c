@@ -11,6 +11,7 @@ int actionSave(){
         return 1;
     }
     char *inputValue = getString("Value: ");
+
     if(strlen(inputValue) > VALUE_SZ){
         printf("The provided value is too big \n");
         return 1;
