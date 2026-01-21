@@ -120,19 +120,21 @@ char *getValue(char *key)
         return NULL;
     }
 
-    if (!strcmp(curNode->key, key))
-    {
-        strcpy(valueStr, curNode->value);
-        return NULL;
-    }
 
-    while (strcmp(curNode->key, key) && curNode->next != NULL)
+    
+    while (strcmp(curNode->key, key) != 0 && curNode->next != NULL)
     {
         curNode = curNode->next;
     }
+   
+    if (strcmp(curNode->key, key) == 0)
+    {
+        strcpy(valueStr, curNode->value);
+        return valueStr;
+    }
 
-    strcpy(valueStr, curNode->value);
-    return valueStr;
+    free(valueStr);
+    return NULL;
 }
 
 int deleteNode(char *key)
