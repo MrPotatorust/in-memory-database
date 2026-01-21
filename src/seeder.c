@@ -6,11 +6,11 @@
 #include "seeder.h"
 #include "helpers.h"
 
+int seedStorage(int nodeNumber)
+{
 
-int seedStorage(int nodeNumber){
-
-    
-    for(int i = 0; i < nodeNumber; i++){
+    for (int i = 0; i < nodeNumber; i++)
+    {
         Node *newNode = generateNode();
 
         saveNode(newNode);
@@ -19,9 +19,11 @@ int seedStorage(int nodeNumber){
     return 0;
 }
 
-Node *generateNode(){
+Node *generateNode()
+{
     Node *newNode = malloc(sizeof(Node));
-    if(!newNode){
+    if (!newNode)
+    {
         perror("malloc");
         return NULL;
     }

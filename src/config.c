@@ -196,20 +196,19 @@ union configValue getFromConfig(configT *config, char *key)
     char *trimmedKey = trimString(key);
 
     // Find in the config
-    for (int i = 0; i < config->itemNum; i++){
+    for (int i = 0; i < config->itemNum; i++)
+    {
 
         const configItem curItem = config->items[i];
 
-
-        if(strcmp(curItem.key, trimmedKey)){
+        if (strcmp(curItem.key, trimmedKey))
+        {
             strcpy(value.string, curItem.value.string);
             break;
         }
     }
 
-    
     free(trimmedKey);
 
     return value;
 }
-

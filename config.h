@@ -1,4 +1,4 @@
-#ifndef CONFIG_INCLUDED 
+#ifndef CONFIG_INCLUDED
 #define CONFIG_INCLUDED
 
 #define STORAGE_SZ 1000
@@ -15,7 +15,6 @@ typedef struct Node
     char key[KEY_SZ];
     char value[VALUE_SZ];
 } Node;
-
 
 extern Node *storage[STORAGE_SZ];
 

@@ -120,13 +120,11 @@ char *getValue(char *key)
         return NULL;
     }
 
-
-    
     while (strcmp(curNode->key, key) != 0 && curNode->next != NULL)
     {
         curNode = curNode->next;
     }
-   
+
     if (strcmp(curNode->key, key) == 0)
     {
         strcpy(valueStr, curNode->value);

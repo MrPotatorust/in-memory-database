@@ -4,23 +4,26 @@
 #include "../config.h"
 #include "helpers.h"
 
-int actionSave(){
+int actionSave()
+{
     char *inputKey = getString("Key: ");
-    if(strlen(inputKey) > KEY_SZ){
+    if (strlen(inputKey) > KEY_SZ)
+    {
         printf("The provided key is too big \n");
         return 1;
     }
     char *inputValue = getString("Value: ");
 
-    if(strlen(inputValue) > VALUE_SZ){
+    if (strlen(inputValue) > VALUE_SZ)
+    {
         printf("The provided value is too big \n");
         return 1;
     }
 
-    if(!inputKey || !inputValue){
+    if (!inputKey || !inputValue)
+    {
         return 1;
     }
-
 
     Node *newNode = malloc(sizeof(Node));
     strncpy(newNode->key, inputKey, KEY_SZ - 1);
@@ -31,7 +34,6 @@ int actionSave(){
 
     newNode->next = NULL;
 
-
     saveNode(newNode);
 
     free(inputKey);
@@ -40,43 +42,50 @@ int actionSave(){
     return 0;
 }
 
-int actionGetValue(){
+int actionGetValue()
+{
 
-    
     char *keyStr = getString("KEY: ");
 
-    if(strlen(keyStr) > KEY_SZ){
+    if (strlen(keyStr) > KEY_SZ)
+    {
         printf("The provided key is too big \n");
         return 1;
     }
 
     char *value = getValue(keyStr);
 
-    if (value != NULL){
+    if (value != NULL)
+    {
         printf("%s \n", value);
-    } 
-    else {
+    }
+    else
+    {
         printf("Could not find the desired value. \n");
     }
-    
+
     return 0;
 }
 
-int actionDelete(){
+int actionDelete()
+{
 
     char *keyStr = getString("KEY: ");
 
-    if(strlen(keyStr) > KEY_SZ){
+    if (strlen(keyStr) > KEY_SZ)
+    {
         printf("The provided key is too big \n");
         return 1;
     }
 
     int deleteCode = deleteNode(keyStr);
 
-    if(!deleteCode){
+    if (!deleteCode)
+    {
         printf("Successfully deleted node. \n");
     }
-    else {
+    else
+    {
         printf("Could not delete node. \n");
     }
 
