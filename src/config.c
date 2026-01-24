@@ -193,6 +193,8 @@ union configValue getFromConfig(configT *config, char *key)
 {
     union configValue value;
 
+    bool found = false;
+
     char *trimmedKey = trimString(key);
 
     // Find in the config
@@ -204,8 +206,15 @@ union configValue getFromConfig(configT *config, char *key)
         if (strcmp(curItem.key, trimmedKey) == 0)
         {
             strcpy(value.string, curItem.value.string);
+            found = true;
             break;
         }
+    }
+
+    if (!found)
+    {
+        *value.string = '\0';
+        printf("Could not get value for key `%s` load from config. \n", trimmedKey);
     }
 
     free(trimmedKey);
