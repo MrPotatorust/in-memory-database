@@ -1,3 +1,5 @@
 {
-  "funny": "test"
+  "max_word_size": "maximum",
+  "min_word_size": "minimum",
+  "default_word_size": "default"
 }

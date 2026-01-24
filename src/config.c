@@ -201,7 +201,7 @@ union configValue getFromConfig(configT *config, char *key)
 
         const configItem curItem = config->items[i];
 
-        if (strcmp(curItem.key, trimmedKey))
+        if (strcmp(curItem.key, trimmedKey) == 0)
         {
             strcpy(value.string, curItem.value.string);
             break;

@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 
     srand((unsigned int)time(NULL));
 
-    // configT *config = initConfig();
-    // printf("test" getFromConfig(config, "fun"));
+    configT *config = initConfig();
+    printf("test %s \n", getFromConfig(config, "fun").string);
 
     int returnCode = 0;
 
