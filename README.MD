@@ -103,7 +103,7 @@ typedef struct Node {
 
 - `seedStorage(int count)` - Generate random key-value pairs for testing
 
-#### 5. **Config Parser** (`config_parser.c`) WIP
+#### 5. **Config Parser** (`src/config_parser/config.c`) WIP
 
 - `parse()` - Parse config.json file
 - `trimString()` - Remove whitespace from strings

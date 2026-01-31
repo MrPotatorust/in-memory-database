@@ -8,7 +8,7 @@
 #include "./src/helpers.h"
 #include "./src/actions.h"
 #include "./src/seeder.h"
-#include "./src/config.h"
+#include "./src/config_parser/config.h"
 
 int action();
 
