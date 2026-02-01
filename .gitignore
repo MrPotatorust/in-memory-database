@@ -1,3 +1,7 @@
 .vscode
 main.exe
 main
+client
+client.exe
+server
+server.exe
