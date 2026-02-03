@@ -5,11 +5,11 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <time.h>
 #include <unistd.h> // read(), write(), close()
 #define MAX 80
 #define PORT 8080
 #define SA struct sockaddr
-
 
 #include "config.h"
 #include "./src/helpers.h"
@@ -31,36 +31,18 @@ void func(int connfd)
         read(connfd, buff, sizeof(buff));
         printf("From client: %s \n", buff);
 
-        char inputAction;
+        action(buff);
 
-        inputAction = buff[0];
 
-        switch (inputAction)
-        {
-        case 's':
-            actionSave();
-            break;
-        case 'e':
-            break;
-        case 'p':
-            printStorage();
-            break;
-        case 'g':
-            actionGetValue();
-            break;
-        case 'd':
-            actionDelete();
-            break;
-        default:
-            break;
-        }
 
+        
         // print buffer which contains the client contents
         bzero(buff, MAX);
         n = 0;
         // copy server message in the buffer
         while ((buff[n++] = (char)getchar()) != '\n')
             ;
+
 
         // and send that buffer to client
         write(connfd, buff, sizeof(buff));
@@ -80,6 +62,8 @@ int main()
     int sockfd, connfd;
     socklen_t len;
     struct sockaddr_in servaddr, cli;
+
+    srand((unsigned int)time(NULL));
 
     // socket create and verification
     sockfd = socket(AF_INET, SOCK_STREAM, 0);

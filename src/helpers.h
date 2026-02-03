@@ -1,5 +1,11 @@
 #include "../config.h"
 
+typedef struct
+{
+    unsigned int count;
+    char **strings;
+} SplitResult;
+
 void printStorage();
 int saveNode(Node *newNode);
 int deleteNode(char *key);
@@ -14,3 +20,4 @@ int parseInt(char *inputString, int *outputInt);
 int generateRandomString(char *outputString, int strLen);
 char generateRandomChar();
 unsigned long hash(unsigned char *str);
+SplitResult splitString(char *string);

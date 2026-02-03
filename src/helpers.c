@@ -276,3 +276,19 @@ unsigned long hash(unsigned char *str)
 
     return hash;
 }
+
+SplitResult splitString(char *string)
+{
+
+    SplitResult splitResult = {};
+
+    char *token = strtok(string, " ");
+
+    while (token != NULL)
+    {
+        printf(" %s\n", token);
+        token = strtok(NULL, " ");
+    }
+
+    return splitResult;
+}

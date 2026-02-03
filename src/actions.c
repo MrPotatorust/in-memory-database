@@ -4,6 +4,35 @@
 #include "../config.h"
 #include "helpers.h"
 
+char *action(char *string)
+{
+
+    splitString(string);
+    
+
+    // switch (inputAction)
+    // {
+    // case 's':
+    //     actionSave();
+    //     break;
+    // case 'e':
+    //     break;
+    // case 'p':
+    //     printStorage();
+    //     break;
+    // case 'g':
+    //     actionGetValue();
+    //     break;
+    // case 'd':
+    //     actionDelete();
+    //     break;
+    // default:
+    //     break;
+    // }
+
+    return NULL;
+}
+
 int actionSave()
 {
     char *inputKey = getString("Key: ");
