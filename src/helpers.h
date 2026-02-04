@@ -2,7 +2,7 @@
 
 typedef struct
 {
-    unsigned int count;
+    int count;
     char **strings;
 } SplitResult;
 

@@ -32,6 +32,7 @@ void func(int connfd)
         printf("From client: %s \n", buff);
 
         action(buff);
+        printStorage();
 
         // print buffer which contains the client contents
         memset(buff, 0, MAX);

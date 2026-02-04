@@ -3,17 +3,33 @@
 #include <string.h>
 #include "../config.h"
 #include "helpers.h"
+#include "actions.h"
 
 char *action(char *string)
 {
+    char *message = malloc(sizeof(char) * MAX_MESSAGE_SZ);
 
-    splitString(string);
+    if (message == NULL){
+        printf("Return message could not be allocated \n");
+        return NULL;
+    }
+
+    SplitResult splitAction = splitString(string);
     
+    printf("COUNT %i", )
 
-    // switch (inputAction)
+    if(splitAction.count != 3){
+        strcpy(message, "Didnt pass enough parameters");
+        return message;
+    }
+
+    
+    printf("TEST ACTION %c \n", splitAction.strings[0][0]);
+
+    // switch (splitAction.strings[0][0])
     // {
     // case 's':
-    //     actionSave();
+    //     actionSave(splitAction.strings[1], splitAction.strings[2]);
     //     break;
     // case 'e':
     //     break;
@@ -33,40 +49,41 @@ char *action(char *string)
     return NULL;
 }
 
-int actionSave()
+int actionSave(char* key, char *value)
 {
-    char *inputKey = getString("Key: ");
-    if (strlen(inputKey) > KEY_SZ)
+    printf("test, %s, %s \n", key, value);
+    // char *key = getString("Key: ");
+    if (strlen(key) > KEY_SZ)
     {
         printf("The provided key is too big \n");
         return 1;
     }
-    char *inputValue = getString("Value: ");
+    // char *value = getString("Value: ");
 
-    if (strlen(inputValue) > VALUE_SZ)
+    if (strlen(value) > VALUE_SZ)
     {
         printf("The provided value is too big \n");
         return 1;
     }
 
-    if (!inputKey || !inputValue)
+    if (!key || !value)
     {
         return 1;
     }
 
     Node *newNode = malloc(sizeof(Node));
-    strncpy(newNode->key, inputKey, KEY_SZ - 1);
+    strncpy(newNode->key, key, KEY_SZ - 1);
     newNode->key[KEY_SZ - 1] = '\0';
 
-    strncpy(newNode->value, inputValue, VALUE_SZ - 1);
+    strncpy(newNode->value, value, VALUE_SZ - 1);
     newNode->value[VALUE_SZ - 1] = '\0';
 
     newNode->next = NULL;
 
     saveNode(newNode);
 
-    free(inputKey);
-    free(inputValue);
+    // free(key);
+    // free(value);
 
     return 0;
 }

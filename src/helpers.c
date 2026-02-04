@@ -286,7 +286,7 @@ SplitResult splitString(char *string)
 
     while (token != NULL)
     {
-        printf(" %s\n", token);
+        splitResult.count++;
         token = strtok(NULL, " ");
     }
 
