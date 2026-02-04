@@ -25,7 +25,7 @@ void func(int connfd)
     // infinite loop for chat
     for (;;)
     {
-        bzero(buff, MAX);
+        memset(buff, 0, MAX);
 
         // read the message from client and copy it in buffer
         read(connfd, buff, sizeof(buff));
@@ -33,16 +33,12 @@ void func(int connfd)
 
         action(buff);
 
-
-
-        
         // print buffer which contains the client contents
-        bzero(buff, MAX);
+        memset(buff, 0, MAX);
         n = 0;
         // copy server message in the buffer
         while ((buff[n++] = (char)getchar()) != '\n')
             ;
-
 
         // and send that buffer to client
         write(connfd, buff, sizeof(buff));
@@ -74,7 +70,7 @@ int main()
     }
     else
         printf("Socket successfully created..\n");
-    bzero(&servaddr, sizeof(servaddr));
+    memset(&servaddr, 0, sizeof(servaddr));
 
     // assign IP, PORT
     servaddr.sin_family = AF_INET;
