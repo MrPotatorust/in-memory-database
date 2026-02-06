@@ -277,16 +277,41 @@ unsigned long hash(unsigned char *str)
     return hash;
 }
 
+//? This could be optimized further by only mallocing one block with the length of the string and then just assigning pointers
+//? But I dont know if its really that viable and I just want to get this done
 SplitResult splitString(char *string)
 {
-
     SplitResult splitResult = {};
 
-    char *token = strtok(string, " ");
+    splitResult.count = 0;
+    splitResult.strings = NULL;
+
+    size_t stringLen = strlen(string) + 1;
+
+    char *copy = malloc(sizeof(char) * stringLen);
+    strcpy(copy, string);
+
+    char *token = strtok(copy, " ");
 
     while (token != NULL)
     {
         splitResult.count++;
+        token = strtok(NULL, " ");
+    }
+
+    strcpy(copy, string);
+
+    splitResult.strings = malloc(sizeof(char *) * splitResult.count);
+
+
+
+    token = strtok(copy, " ");
+
+    int count = 0;
+    while (token != NULL)
+    {
+        splitResult.strings[count] = token;
+        count++;
         token = strtok(NULL, " ");
     }
 
