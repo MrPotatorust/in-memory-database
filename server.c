@@ -55,15 +55,17 @@ void func(int connfd)
         // while ((serverBuff[n++] = (char)getchar()) != '\n')
         //     ;
 
-        write(connfd, returnBuff, sizeof(returnBuff));
-
+        
         free(actionMessage);
-
+        
+        printf("ClientBuff %s", clientBuff);
         if (strncmp("exit", clientBuff, 4) == 0)
         {
             printf("Server Exit...\n");
+            write(connfd, "exit \n", sizeof(char) * 6);
             break;
         }
+        write(connfd, returnBuff, sizeof(returnBuff));
     }
 }
 
