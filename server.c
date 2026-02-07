@@ -20,32 +20,46 @@
 // Function designed for chat between client and server.
 void func(int connfd)
 {
-    char buff[MAX];
-    int n;
+    char returnBuff[MAX];
+    char clientBuff[MAX];
+    // char serverBuff[MAX];
+    // int n;
     // infinite loop for chat
     for (;;)
     {
-        memset(buff, 0, MAX);
+        memset(returnBuff, 0, MAX);
+        memset(clientBuff, 0, MAX);
+        // memset(serverBuff, 0, MAX);
 
         // read the message from client and copy it in buffer
-        read(connfd, buff, sizeof(buff));
-        printf("From client: %s \n", buff);
+        read(connfd, clientBuff, sizeof(clientBuff));
+        printf("From client: %s", clientBuff);
 
-        action(buff);
-        printStorage();
+        char *actionMessage = action(clientBuff);
+
+        // Backup if the message could not be allocated
+        if (actionMessage != NULL && strlen(actionMessage) < MAX)
+        {
+            strcpy(returnBuff, actionMessage);
+        }
+        else
+        {
+            strcpy(returnBuff, "An uknown error occured action didnt return a message \n");
+        }
+        // printStorage();
+
+        printf("Returning to client: %s", returnBuff);
 
         // print buffer which contains the client contents
-        memset(buff, 0, MAX);
-        n = 0;
-        // copy server message in the buffer
-        while ((buff[n++] = (char)getchar()) != '\n')
-            ;
+        // n = 0;
+        // while ((serverBuff[n++] = (char)getchar()) != '\n')
+        //     ;
 
-        // and send that buffer to client
-        write(connfd, buff, sizeof(buff));
+        write(connfd, returnBuff, sizeof(returnBuff));
 
-        // if msg contains "Exit" then server exit and chat ended.
-        if (strncmp("exit", buff, 4) == 0)
+        free(actionMessage);
+
+        if (strncmp("exit", clientBuff, 4) == 0)
         {
             printf("Server Exit...\n");
             break;
@@ -110,6 +124,7 @@ int main()
     // Function for chatting between client and server
     func(connfd);
 
+    printf("Closing socket... \n");
     // After chatting close the socket
     close(sockfd);
 }

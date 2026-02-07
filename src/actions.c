@@ -15,16 +15,20 @@ char *action(char *string)
     }
 
     SplitResult splitAction = splitString(string);
-    
-    printf("COUNT %i", )
+
+
+    // printf("COUNT %i", splitAction.count);
 
     if(splitAction.count != 3){
-        strcpy(message, "Didnt pass enough parameters");
+        strcpy(message, "Didnt pass enough parameters \n");
         return message;
     }
 
+    strcpy(message, "Successfully executed \n");
+    return message;
+
     
-    printf("TEST ACTION %c \n", splitAction.strings[0][0]);
+    // printf("TEST ACTION %c \n", splitAction.strings[0][0]);
 
     // switch (splitAction.strings[0][0])
     // {
