@@ -9,60 +9,51 @@ char *action(char *string)
 {
     char *message = malloc(sizeof(char) * MAX_MESSAGE_SZ);
 
-    if (message == NULL){
+    if (message == NULL)
+    {
         printf("Return message could not be allocated \n");
         return NULL;
     }
 
     SplitResult splitAction = splitString(string);
 
-
     // printf("COUNT %i", splitAction.count);
 
-    if(splitAction.count != 3){
-        strcpy(message, "Didnt pass enough parameters \n");
-        return message;
+    // printf("TEST ACTION %c \n", splitAction.strings[0][0]);
+    strcpy(message, "Successfully executed \n");
+
+    switch (splitAction.strings[0][0])
+    {
+    case 's':
+        strcpy(message, actionSave(splitAction.strings[1], splitAction.strings[2]));
+        break;
+    case 'e':
+        break;
+    case 'p':
+        strcpy(message, printStorage());
+        break;
+    case 'g':
+        strcpy(message, actionGetValue(splitAction.strings[1]));
+        break;
+    case 'd':
+        strcpy(message, actionDelete(splitAction.strings[1]));
+        break;
+    default:
+        break;
     }
 
-    strcpy(message, "Successfully executed \n");
     return message;
-
-    
-    // printf("TEST ACTION %c \n", splitAction.strings[0][0]);
-
-    // switch (splitAction.strings[0][0])
-    // {
-    // case 's':
-    //     actionSave(splitAction.strings[1], splitAction.strings[2]);
-    //     break;
-    // case 'e':
-    //     break;
-    // case 'p':
-    //     printStorage();
-    //     break;
-    // case 'g':
-    //     actionGetValue();
-    //     break;
-    // case 'd':
-    //     actionDelete();
-    //     break;
-    // default:
-    //     break;
-    // }
 
     return NULL;
 }
 
-int actionSave(char* key, char *value)
+char *actionSave(char *key, char *value)
 {
-    printf("test, %s, %s \n", key, value);
-    // char *key = getString("Key: ");
     if (strlen(key) > KEY_SZ)
     {
         printf("The provided key is too big \n");
         return 1;
     }
-    // char *value = getString("Value: ");
 
     if (strlen(value) > VALUE_SZ)
     {
@@ -86,16 +77,11 @@ int actionSave(char* key, char *value)
 
     saveNode(newNode);
 
-    // free(key);
-    // free(value);
-
     return 0;
 }
 
-int actionGetValue()
+char *actionGetValue(char *keyStr)
 {
-
-    char *keyStr = getString("KEY: ");
 
     if (strlen(keyStr) > KEY_SZ)
     {
@@ -117,10 +103,8 @@ int actionGetValue()
     return 0;
 }
 
-int actionDelete()
+char *actionDelete(char *keyStr)
 {
-
-    char *keyStr = getString("KEY: ");
 
     if (strlen(keyStr) > KEY_SZ)
     {
@@ -138,8 +122,6 @@ int actionDelete()
     {
         printf("Could not delete node. \n");
     }
-
-    free(keyStr);
 
     return 0;
 }

@@ -46,7 +46,7 @@ void func(int connfd)
         {
             strcpy(returnBuff, "An uknown error occured action didnt return a message \n");
         }
-        // printStorage();
+        printStorage();
 
         printf("Returning to client: %s", returnBuff);
 
