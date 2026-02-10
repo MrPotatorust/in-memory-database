@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h> // read(), write(), close()
-#define MAX 80
+#define MAX 256
 #define PORT 8080
 #define SA struct sockaddr
 
@@ -33,7 +33,8 @@ void func(int connfd)
 
         // read the message from client and copy it in buffer
         read(connfd, clientBuff, sizeof(clientBuff));
-        printf("From client: %s", clientBuff);
+
+        clientBuff[strcspn(clientBuff, "\n")] = 0;
 
         char *actionMessage = action(clientBuff);
 
@@ -48,7 +49,6 @@ void func(int connfd)
         }
         printStorage();
 
-        printf("Returning to client: %s", returnBuff);
 
         // print buffer which contains the client contents
         // n = 0;
@@ -58,7 +58,7 @@ void func(int connfd)
         
         free(actionMessage);
         
-        printf("ClientBuff %s", clientBuff);
+        printf("Returning to client: %s", clientBuff);
         if (strncmp("exit", clientBuff, 4) == 0)
         {
             printf("Server Exit...\n");

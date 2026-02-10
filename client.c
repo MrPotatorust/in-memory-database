@@ -6,7 +6,7 @@
 #include <strings.h> // bzero()
 #include <sys/socket.h>
 #include <unistd.h> // read(), write(), close()
-#define MAX 80
+#define MAX 256
 #define PORT 8080
 #define SA struct sockaddr
 void func(int sockfd)
@@ -16,14 +16,13 @@ void func(int sockfd)
     for (;;)
     {
         bzero(buff, sizeof(buff));
-        printf("Enter the string : ");
         n = 0;
         while ((buff[n++] = (char)getchar()) != '\n')
             ;
         write(sockfd, buff, sizeof(buff));
         bzero(buff, sizeof(buff));
         read(sockfd, buff, sizeof(buff));
-        printf("From Server : %s", buff);
+        printf("%s", buff);
         if ((strncmp(buff, "exit", 4)) == 0)
         {
             printf("Client Exit...\n");

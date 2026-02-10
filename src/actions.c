@@ -8,6 +8,7 @@
 char *action(char *string)
 {
     char *message = malloc(sizeof(char) * MAX_MESSAGE_SZ);
+    char *actionMessage = NULL;
 
     if (message == NULL)
     {
@@ -17,53 +18,75 @@ char *action(char *string)
 
     SplitResult splitAction = splitString(string);
 
-    // printf("COUNT %i", splitAction.count);
-
-    // printf("TEST ACTION %c \n", splitAction.strings[0][0]);
-    strcpy(message, "Successfully executed \n");
-
     switch (splitAction.strings[0][0])
     {
     case 's':
-        strcpy(message, actionSave(splitAction.strings[1], splitAction.strings[2]));
-        break;
-    case 'e':
-        break;
-    case 'p':
-        strcpy(message, printStorage());
+        if (splitAction.count != 3)
+        {
+            strcpy(message, "Didnt pass correct amount of arguments 3, [action] [key] [value]");
+            return message;
+        }
+        actionMessage = actionSave(splitAction.strings[1], splitAction.strings[2]);
         break;
     case 'g':
-        strcpy(message, actionGetValue(splitAction.strings[1]));
+        if (splitAction.count != 2)
+        {
+            strcpy(message, "Didnt pass correct amount of arguments 2, [action] [key]");
+            return message;
+        }
+        actionMessage = actionGetValue(splitAction.strings[1]);
         break;
     case 'd':
-        strcpy(message, actionDelete(splitAction.strings[1]));
+        if (splitAction.count != 2)
+        {
+            strcpy(message, "Didnt pass correct amount of arguments 2, [action] [key]");
+            return message;
+        }
+        actionMessage = actionDelete(splitAction.strings[1]);
         break;
     default:
         break;
     }
 
+    if (actionMessage != NULL)
+    {
+        strcpy(message, actionMessage);
+        free(actionMessage);
+    }
+    else
+    {
+        strcpy(message, "No action \n");
+    }
     return message;
-
-    return NULL;
 }
 
 char *actionSave(char *key, char *value)
 {
+    size_t messageSize = sizeof(char) * MAX_MESSAGE_SZ;
+    char *message = malloc(messageSize);
+
+    if (message == NULL)
+    {
+        printf("Could not allocate memory for message in actionSave \n");
+        return NULL;
+    }
+
     if (strlen(key) > KEY_SZ)
     {
-        printf("The provided key is too big \n");
-        return 1;
+        strcpy(message, "The provided key is too big \n");
+        return message;
     }
 
     if (strlen(value) > VALUE_SZ)
     {
-        printf("The provided value is too big \n");
-        return 1;
+        strcpy(message, "The provided value is too big \n");
+        return message;
     }
 
     if (!key || !value)
     {
-        return 1;
+        strcpy(message, "Didnt provide key or value \n");
+        return message;
     }
 
     Node *newNode = malloc(sizeof(Node));
@@ -77,51 +100,70 @@ char *actionSave(char *key, char *value)
 
     saveNode(newNode);
 
-    return 0;
+    snprintf(message, messageSize, "saved %s, %s \n", newNode->key, newNode->value);
+    return message;
 }
 
 char *actionGetValue(char *keyStr)
 {
+    size_t messageSize = sizeof(char) * MAX_MESSAGE_SZ;
+    char *message = malloc(messageSize);
+
+    if (message == NULL)
+    {
+        printf("Could not allocate memory for message in actionGetValue \n");
+        return NULL;
+    }
 
     if (strlen(keyStr) > KEY_SZ)
     {
-        printf("The provided key is too big \n");
-        return 1;
+        strcpy(message, "The provided key is too big \n");
+        return message;
     }
 
     char *value = getValue(keyStr);
 
-    if (value != NULL)
+    if (value == NULL)
     {
-        printf("%s \n", value);
-    }
-    else
-    {
-        printf("Could not find the desired value. \n");
+        strcpy(message, "Could not find the desired value. \n");
+        return message;
     }
 
-    return 0;
+    snprintf(message, messageSize, "%s\n", value);
+
+    free(value);
+
+    return message;
 }
 
 char *actionDelete(char *keyStr)
 {
+    size_t messageSize = sizeof(char) * MAX_MESSAGE_SZ;
+    char *message = malloc(messageSize);
+
+    if (message == NULL)
+    {
+        printf("Could not allocate memory for message in actionGetValue \n");
+        return NULL;
+    }
 
     if (strlen(keyStr) > KEY_SZ)
     {
-        printf("The provided key is too big \n");
-        return 1;
+        strcpy(message, "The provided key is too big \n");
+        return message;
     }
 
     int deleteCode = deleteNode(keyStr);
 
-    if (!deleteCode)
+    if (deleteCode == 0)
     {
-        printf("Successfully deleted node. \n");
+
+        snprintf(message, messageSize, "deleted %s\n", keyStr);
     }
     else
     {
-        printf("Could not delete node. \n");
+        strcpy(message, "Could not delete node. \n");
     }
 
-    return 0;
+    return message;
 }
