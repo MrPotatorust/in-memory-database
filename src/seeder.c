@@ -13,7 +13,7 @@ int seedStorage(int nodeNumber)
     {
         Node *newNode = generateNode();
 
-        saveNode(newNode);
+        saveNode(newNode, 1);
     }
 
     return 0;

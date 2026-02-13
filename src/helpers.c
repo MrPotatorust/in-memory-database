@@ -35,7 +35,7 @@ void printStorage()
     printf("=============================== \n");
 }
 
-int saveNode(Node *newNode)
+int saveNode(Node *newNode, bool force)
 {
 
     long unsigned int arrIndex = getStorageIndex(newNode->key);
@@ -53,7 +53,7 @@ int saveNode(Node *newNode)
         curNode = curNode->next;
     }
 
-    if (!strcmp(curNode->key, newNode->key))
+    if (!force && !strcmp(curNode->key, newNode->key))
     {
         printf("A Node with this key already exists. This action will overwrite it. \n");
         if (!getConfirmation())

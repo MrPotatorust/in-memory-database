@@ -1,4 +1,5 @@
 #include "../config.h"
+#include <stdbool.h>
 
 typedef struct
 {
@@ -7,7 +8,7 @@ typedef struct
 } SplitResult;
 
 void printStorage();
-int saveNode(Node *newNode);
+int saveNode(Node *newNode, bool force);
 int deleteNode(char *key);
 void freeStorage();
 char *getValue(char *key);
