@@ -22,6 +22,7 @@ void func(int connfd)
 {
     char returnBuff[MAX];
     char clientBuff[MAX];
+    char *actionMessage = NULL;
     // char serverBuff[MAX];
     // int n;
     // infinite loop for chat
@@ -36,7 +37,7 @@ void func(int connfd)
 
         clientBuff[strcspn(clientBuff, "\n")] = 0;
 
-        char *actionMessage = action(clientBuff);
+        actionMessage = action(clientBuff);
 
         // Backup if the message could not be allocated
         if (actionMessage != NULL && strlen(actionMessage) < MAX)
@@ -49,16 +50,15 @@ void func(int connfd)
         }
         printStorage();
 
-
         // print buffer which contains the client contents
         // n = 0;
         // while ((serverBuff[n++] = (char)getchar()) != '\n')
         //     ;
 
-        
         free(actionMessage);
-        
-        printf("Returning to client: %s", clientBuff);
+        actionMessage = NULL;
+
+        printf("Returning to client: %s", returnBuff);
         if (strncmp("exit", clientBuff, 4) == 0)
         {
             printf("Server Exit...\n");

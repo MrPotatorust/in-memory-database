@@ -7,6 +7,7 @@
 
 char *action(char *string)
 {
+
     char *message = malloc(sizeof(char) * MAX_MESSAGE_SZ);
     char *actionMessage = NULL;
 
@@ -14,6 +15,12 @@ char *action(char *string)
     {
         printf("Return message could not be allocated \n");
         return NULL;
+    }
+
+    if (string == NULL || strlen(string) < 1)
+    {
+        strcpy(message, "No action \n");
+        return message;
     }
 
     SplitResult splitAction = splitString(string);
