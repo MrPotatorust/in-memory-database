@@ -17,7 +17,7 @@ char *action(char *string)
         return NULL;
     }
 
-    if (string == NULL || strlen(string) < 1)
+    if (string == NULL || strlen(string) < 0)
     {
         strcpy(message, "No action \n");
         return message;

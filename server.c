@@ -6,8 +6,10 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <time.h>
+#include <sys/epoll.h>
 #include <unistd.h> // read(), write(), close()
-#define MAX 256
+#define MAX_BUFFER_LENGTH 256
+#define MAX_CONNECTIONS 1000
 #define PORT 8080
 #define SA struct sockaddr
 
@@ -20,17 +22,14 @@
 // Function designed for chat between client and server.
 void func(int connfd)
 {
-    char returnBuff[MAX];
-    char clientBuff[MAX];
+    char returnBuff[MAX_BUFFER_LENGTH];
+    char clientBuff[MAX_BUFFER_LENGTH];
     char *actionMessage = NULL;
-    // char serverBuff[MAX];
-    // int n;
     // infinite loop for chat
     for (;;)
     {
-        memset(returnBuff, 0, MAX);
-        memset(clientBuff, 0, MAX);
-        // memset(serverBuff, 0, MAX);
+        memset(returnBuff, 0, MAX_BUFFER_LENGTH);
+        memset(clientBuff, 0, MAX_BUFFER_LENGTH);
 
         // read the message from client and copy it in buffer
         read(connfd, clientBuff, sizeof(clientBuff));
@@ -40,7 +39,7 @@ void func(int connfd)
         actionMessage = action(clientBuff);
 
         // Backup if the message could not be allocated
-        if (actionMessage != NULL && strlen(actionMessage) < MAX)
+        if (actionMessage != NULL && strlen(actionMessage) < MAX_BUFFER_LENGTH)
         {
             strcpy(returnBuff, actionMessage);
         }
@@ -49,11 +48,6 @@ void func(int connfd)
             strcpy(returnBuff, "An uknown error occured action didnt return a message \n");
         }
         printStorage();
-
-        // print buffer which contains the client contents
-        // n = 0;
-        // while ((serverBuff[n++] = (char)getchar()) != '\n')
-        //     ;
 
         free(actionMessage);
         actionMessage = NULL;
@@ -72,9 +66,10 @@ void func(int connfd)
 // Driver function
 int main()
 {
-    int sockfd, connfd;
-    socklen_t len;
+    int sockfd, connfd, epollfd, nfds;
+    socklen_t addrlen;
     struct sockaddr_in servaddr, cli;
+    struct epoll_event ev, events[MAX_CONNECTIONS];
 
     srand((unsigned int)time(NULL));
 
@@ -109,19 +104,70 @@ int main()
         printf("Listen failed...\n");
         exit(0);
     }
-    else
-        printf("Server listening..\n");
-    len = sizeof(cli);
+    printf("Server listening..\n");
 
-    // Accept the data packet from client and verification
-    connfd = accept(sockfd, (SA *)&cli, &len);
-    if (connfd < 0)
+    addrlen = sizeof(cli);
+    epollfd = epoll_create1(0);
+    if (epollfd == -1)
     {
-        printf("server accept failed...\n");
-        exit(0);
+        perror("epoll_create1");
+        exit(EXIT_FAILURE);
     }
-    else
-        printf("server accept the client...\n");
+
+    ev.events = EPOLLIN;
+    ev.data.fd = sockfd;
+    if (epoll_ctl(epollfd, EPOLL_CTL_ADD, sockfd, &ev) == -1)
+    {
+        perror("epoll_ctl: listen_sock");
+        exit(EXIT_FAILURE);
+    }
+
+    for (;;)
+    {
+        nfds = epoll_wait(epollfd, events, MAX_CONNECTIONS, -1);
+        if (nfds == -1)
+        {
+            perror("epoll_wait");
+            exit(EXIT_FAILURE);
+        }
+
+        for (int n = 0; n < nfds; ++n)
+        {
+            if (events[n].data.fd == sockfd)
+            {
+                connfd = accept(sockfd,
+                                (SA *)&cli, &addrlen);
+                if (connfd == -1)
+                {
+                    perror("accept");
+                    exit(EXIT_FAILURE);
+                }
+                setnonblocking(connfd);
+                ev.events = EPOLLIN | EPOLLET;
+                ev.data.fd = connfd;
+                if (epoll_ctl(epollfd, EPOLL_CTL_ADD, connfd,
+                              &ev) == -1)
+                {
+                    perror("epoll_ctl: conn_sock");
+                    exit(EXIT_FAILURE);
+                }
+            }
+            else
+            {
+                do_use_fd(events[n].data.fd);
+            }
+        }
+    }
+
+    // // Accept the data packet from client and verification
+    // connfd = accept(sockfd, (SA *)&cli, &addrlen);
+    // if (connfd < 0)
+    // {
+    //     printf("server accept failed...\n");
+    //     exit(0);
+    // }
+    // else
+    //     printf("server accept the client...\n");
 
     // Function for chatting between client and server
     func(connfd);
