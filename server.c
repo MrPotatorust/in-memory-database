@@ -32,7 +32,13 @@ void func(int connfd)
         memset(clientBuff, 0, MAX_BUFFER_LENGTH);
 
         // read the message from client and copy it in buffer
-        read(connfd, clientBuff, sizeof(clientBuff));
+        int nbytes = read(connfd, clientBuff, sizeof(clientBuff));
+
+        if (nbytes <= 0)
+        {
+            close(connfd);
+            return;
+        }
 
         clientBuff[strcspn(clientBuff, "\n")] = 0;
 
@@ -154,25 +160,9 @@ int main()
             }
             else
             {
-                do_use_fd(events[n].data.fd);
+                // Function for chatting between client and server
+                func(events[n].data.fd);
             }
         }
     }
-
-    // // Accept the data packet from client and verification
-    // connfd = accept(sockfd, (SA *)&cli, &addrlen);
-    // if (connfd < 0)
-    // {
-    //     printf("server accept failed...\n");
-    //     exit(0);
-    // }
-    // else
-    //     printf("server accept the client...\n");
-
-    // Function for chatting between client and server
-    func(connfd);
-
-    printf("Closing socket... \n");
-    // After chatting close the socket
-    close(sockfd);
 }
