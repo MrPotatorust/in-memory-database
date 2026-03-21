@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <time.h>
 #include <sys/epoll.h>
+#include <errno.h>
 #include <unistd.h> // read(), write(), close()
 #define MAX_BUFFER_LENGTH 256
 #define MAX_CONNECTIONS 1000
@@ -15,6 +16,8 @@
 
 #include "config.h"
 #include "server.h"
+#include <fcntl.h>
+#include <unistd.h>
 #include "./src/helpers.h"
 #include "./src/actions.h"
 #include "./src/seeder.h"
@@ -35,8 +38,21 @@ void func(int connfd)
         // read the message from client and copy it in buffer
         ssize_t nbytes = read(connfd, clientBuff, sizeof(clientBuff));
 
-        if (nbytes <= 0)
+        if (nbytes == 0)
         {
+            printf("Closing socket %i \n", connfd);
+            close(connfd);
+            return;
+        }
+
+        if (nbytes < 0)
+        {
+            if (errno == EAGAIN || errno == EWOULDBLOCK)
+            {
+                return;
+            }
+
+            printf("Closing socket %i due to read error\n", connfd);
             close(connfd);
             return;
         }
@@ -138,8 +154,10 @@ int main()
             exit(EXIT_FAILURE);
         }
 
+        printf("Looping through events \n");
         for (int n = 0; n < nfds; ++n)
         {
+            printf("Looping %i \n", n);
             if (events[n].data.fd == sockfd)
             {
                 connfd = accept(sockfd,
@@ -149,6 +167,7 @@ int main()
                     perror("accept");
                     exit(EXIT_FAILURE);
                 }
+                printf("Accepted socket %i \n", connfd);
                 setnonblocking(connfd);
                 ev.events = EPOLLIN | EPOLLET;
                 ev.data.fd = connfd;
@@ -163,13 +182,11 @@ int main()
             {
                 // Function for chatting between client and server
                 func(events[n].data.fd);
+                printf("Finished func \n");
             }
         }
     }
 }
-
-#include <fcntl.h>
-#include <unistd.h>
 
 int setnonblocking(int fd)
 {
