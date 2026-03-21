@@ -76,12 +76,6 @@ void func(int connfd)
         actionMessage = NULL;
 
         printf("Returning to client: %s", returnBuff);
-        if (strncmp("exit", clientBuff, 4) == 0)
-        {
-            printf("Server Exit...\n");
-            write(connfd, "exit \n", sizeof(char) * 6);
-            break;
-        }
         write(connfd, returnBuff, sizeof(returnBuff));
     }
 }
@@ -157,7 +151,6 @@ int main()
         printf("Looping through events \n");
         for (int n = 0; n < nfds; ++n)
         {
-            printf("Looping %i \n", n);
             if (events[n].data.fd == sockfd)
             {
                 connfd = accept(sockfd,

@@ -17,7 +17,7 @@ char *action(char *string)
         return NULL;
     }
 
-    if (string == NULL || strlen(string) > 0)
+    if (string == NULL || strlen(string) == 0)
     {
         strcpy(message, "No action \n");
         return message;
@@ -30,7 +30,7 @@ char *action(char *string)
     case 's':
         if (splitAction.count != 3)
         {
-            strcpy(message, "Didnt pass correct amount of arguments 3, [action] [key] [value]");
+            strcpy(message, "Didnt pass correct amount of arguments 3, [action] [key] [value] \n");
             return message;
         }
         actionMessage = actionSave(splitAction.strings[1], splitAction.strings[2]);
@@ -38,7 +38,7 @@ char *action(char *string)
     case 'g':
         if (splitAction.count != 2)
         {
-            strcpy(message, "Didnt pass correct amount of arguments 2, [action] [key]");
+            strcpy(message, "Didnt pass correct amount of arguments 2, [action] [key] \n");
             return message;
         }
         actionMessage = actionGetValue(splitAction.strings[1]);
@@ -46,7 +46,7 @@ char *action(char *string)
     case 'd':
         if (splitAction.count != 2)
         {
-            strcpy(message, "Didnt pass correct amount of arguments 2, [action] [key]");
+            strcpy(message, "Didnt pass correct amount of arguments 2, [action] [key] \n");
             return message;
         }
         actionMessage = actionDelete(splitAction.strings[1]);
