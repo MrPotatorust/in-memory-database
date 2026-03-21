@@ -14,6 +14,7 @@
 #define SA struct sockaddr
 
 #include "config.h"
+#include "server.h"
 #include "./src/helpers.h"
 #include "./src/actions.h"
 #include "./src/seeder.h"
@@ -32,7 +33,7 @@ void func(int connfd)
         memset(clientBuff, 0, MAX_BUFFER_LENGTH);
 
         // read the message from client and copy it in buffer
-        int nbytes = read(connfd, clientBuff, sizeof(clientBuff));
+        ssize_t nbytes = read(connfd, clientBuff, sizeof(clientBuff));
 
         if (nbytes <= 0)
         {
@@ -165,4 +166,16 @@ int main()
             }
         }
     }
+}
+
+#include <fcntl.h>
+#include <unistd.h>
+
+int setnonblocking(int fd)
+{
+    int flags = fcntl(fd, F_GETFL, 0);
+    if (flags == -1)
+        return -1;
+
+    return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 }
