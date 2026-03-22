@@ -8,11 +8,17 @@
 #include <time.h>
 #include <sys/epoll.h>
 #include <errno.h>
-#include <unistd.h> // read(), write(), close()
+#include <dirent.h>
+#include <unistd.h>
 #define MAX_BUFFER_LENGTH 256
 #define MAX_CONNECTIONS 1000
 #define PORT 8080
 #define SA struct sockaddr
+
+#define PERSIST_EVERY_SECONDS 120
+#define TIME_T_SECONDS_DIGITS 10
+#define STORAGE_DIR_PATH "./storage"
+#define STORAGE_FILE_EXT ".txt"
 
 #include "config.h"
 #include "server.h"
@@ -23,15 +29,28 @@
 #include "./src/seeder.h"
 #include "./src/config_parser/config.h"
 
-// Function designed for chat between client and server.
+// The server function
 void func(int connfd)
 {
     char returnBuff[MAX_BUFFER_LENGTH];
     char clientBuff[MAX_BUFFER_LENGTH];
     char *actionMessage = NULL;
-    // infinite loop for chat
+
+    time_t currentTime;
+    time_t lastSaveTime = 0;
+
     for (;;)
     {
+        time(&currentTime);
+
+        printf("Current time %li \n", (long int)currentTime);
+
+        // persist to local file
+        if (labs((long int)currentTime - (long int)lastSaveTime) > PERSIST_EVERY_SECONDS)
+        {
+            persist();
+        }
+
         memset(returnBuff, 0, MAX_BUFFER_LENGTH);
         memset(clientBuff, 0, MAX_BUFFER_LENGTH);
 
@@ -115,7 +134,6 @@ int main()
     else
         printf("Socket successfully binded..\n");
 
-    // Now server is ready to listen and verification
     if ((listen(sockfd, 5)) != 0)
     {
         printf("Listen failed...\n");
@@ -187,4 +205,28 @@ int setnonblocking(int fd)
         return -1;
 
     return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+}
+
+int persist()
+{
+    time_t saveTime;
+    time(&saveTime);
+
+    // Generate the filename from the current time
+    char filePath[TIME_T_SECONDS_DIGITS + 4]; // add the extension length
+    itoa(saveTime, filePath, 10);
+    strncat(filePath, STORAGE_FILE_EXT, 4);
+
+    if (fork() == 0)
+    {
+        printf("Child processes cannot run persist \n");
+        return 1;
+    }
+
+    if (canAccessDir(STORAGE_DIR_PATH) != 0)
+        return 1;
+
+    persistStorage(filePath);
+
+    return 0;
 }

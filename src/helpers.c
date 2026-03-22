@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <errno.h>
+#include <dirent.h>
 
 #include "helpers.h"
 #include "../config.h"
@@ -303,8 +305,6 @@ SplitResult splitString(char *string)
 
     splitResult.strings = malloc(sizeof(char *) * splitResult.count);
 
-
-
     token = strtok(copy, " ");
 
     int count = 0;
@@ -316,4 +316,53 @@ SplitResult splitString(char *string)
     }
 
     return splitResult;
+}
+
+int canAccessDir(char *path)
+{
+    DIR *storageDir = opendir(path);
+
+    if (storageDir)
+    {
+        closedir(storageDir);
+        return 0;
+    }
+    if (ENOENT == errno)
+    {
+        printf("The directory at path %s does not exist \n", path);
+        return errno;
+    }
+    printf("The directory at %s is not accessible \n", path);
+    return errno;
+}
+
+int persistStorage()
+{
+    FILE *fptr;
+    fptr = fopen("filename.txt", "w");
+
+    if (fptr == NULL)
+    {
+        printf("Could not create new storage file \n");
+        return 1;
+    }
+
+    printf("Successfully created a file");
+
+    // for (int i = 0; i < STORAGE_SZ; i++)
+    // {
+
+    //     Node *curNode = storage[i];
+
+    //     if (curNode != NULL)
+    //     {
+    //         if (curNode->next != NULL)
+    //         {
+    //             while (curNode->next != NULL)
+    //             {
+    //                 curNode = curNode->next;
+    //             }
+    //         }
+    //     }
+    // }
 }
