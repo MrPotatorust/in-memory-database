@@ -148,7 +148,7 @@ int main()
             exit(EXIT_FAILURE);
         }
 
-        printf("Looping through events \n");
+        printf("New event \n");
         for (int n = 0; n < nfds; ++n)
         {
             if (events[n].data.fd == sockfd)
@@ -175,7 +175,6 @@ int main()
             {
                 // Function for chatting between client and server
                 func(events[n].data.fd);
-                printf("Finished func \n");
             }
         }
     }
