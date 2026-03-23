@@ -36,67 +36,51 @@ void func(int connfd)
     char clientBuff[MAX_BUFFER_LENGTH];
     char *actionMessage = NULL;
 
-    time_t currentTime;
-    time_t lastSaveTime = 0;
+    memset(returnBuff, 0, MAX_BUFFER_LENGTH);
+    memset(clientBuff, 0, MAX_BUFFER_LENGTH);
 
-    for (;;)
+    // read the message from client and copy it in buffer
+    ssize_t nbytes = read(connfd, clientBuff, sizeof(clientBuff));
+
+    if (nbytes == 0)
     {
-        time(&currentTime);
-
-        printf("Current time %li \n", (long int)currentTime);
-
-        // persist to local file
-        if (labs((long int)currentTime - (long int)lastSaveTime) > PERSIST_EVERY_SECONDS)
-        {
-            persist();
-        }
-
-        memset(returnBuff, 0, MAX_BUFFER_LENGTH);
-        memset(clientBuff, 0, MAX_BUFFER_LENGTH);
-
-        // read the message from client and copy it in buffer
-        ssize_t nbytes = read(connfd, clientBuff, sizeof(clientBuff));
-
-        if (nbytes == 0)
-        {
-            printf("Closing socket %i \n", connfd);
-            close(connfd);
-            return;
-        }
-
-        if (nbytes < 0)
-        {
-            if (errno == EAGAIN || errno == EWOULDBLOCK)
-            {
-                return;
-            }
-
-            printf("Closing socket %i due to read error\n", connfd);
-            close(connfd);
-            return;
-        }
-
-        clientBuff[strcspn(clientBuff, "\n")] = 0;
-
-        actionMessage = action(clientBuff);
-
-        // Backup if the message could not be allocated
-        if (actionMessage != NULL && strlen(actionMessage) < MAX_BUFFER_LENGTH)
-        {
-            strcpy(returnBuff, actionMessage);
-        }
-        else
-        {
-            strcpy(returnBuff, "An uknown error occured action didnt return a message \n");
-        }
-        printStorage();
-
-        free(actionMessage);
-        actionMessage = NULL;
-
-        printf("Returning to client: %s", returnBuff);
-        write(connfd, returnBuff, sizeof(returnBuff));
+        printf("Closing socket %i \n", connfd);
+        close(connfd);
+        return;
     }
+
+    if (nbytes < 0)
+    {
+        if (errno == EAGAIN || errno == EWOULDBLOCK)
+        {
+            return;
+        }
+
+        printf("Closing socket %i due to read error\n", connfd);
+        close(connfd);
+        return;
+    }
+
+    clientBuff[strcspn(clientBuff, "\n")] = 0;
+
+    actionMessage = action(clientBuff);
+
+    // Backup if the message could not be allocated
+    if (actionMessage != NULL && strlen(actionMessage) < MAX_BUFFER_LENGTH)
+    {
+        strcpy(returnBuff, actionMessage);
+    }
+    else
+    {
+        strcpy(returnBuff, "An uknown error occured action didnt return a message \n");
+    }
+    printStorage();
+
+    free(actionMessage);
+    actionMessage = NULL;
+
+    printf("Returning to client: %s", returnBuff);
+    write(connfd, returnBuff, sizeof(returnBuff));
 }
 
 // Driver function
@@ -106,6 +90,9 @@ int main()
     socklen_t addrlen;
     struct sockaddr_in servaddr, cli;
     struct epoll_event ev, events[MAX_CONNECTIONS];
+
+    time_t currentTime;
+    time_t lastSaveTime = 0;
 
     srand((unsigned int)time(NULL));
 
@@ -195,6 +182,16 @@ int main()
                 func(events[n].data.fd);
             }
         }
+
+        time(&currentTime);
+
+        printf("Current time %li \n", (long int)currentTime);
+
+        // persist to local file
+        if (labs((long int)currentTime - (long int)lastSaveTime) > PERSIST_EVERY_SECONDS)
+        {
+            persist();
+        }
     }
 }
 
@@ -214,7 +211,7 @@ int persist()
 
     // Generate the filename from the current time
     char filePath[TIME_T_SECONDS_DIGITS + 5]; // add the extension length + null terminator
-    itoa(saveTime, filePath, 10);
+    snprintf(filePath, sizeof(filePath), "%li", saveTime);
     strncat(filePath, STORAGE_FILE_EXT, 5);
 
     if (fork() == 0)

@@ -336,10 +336,10 @@ int canAccessDir(char *path)
     return errno;
 }
 
-int persistStorage()
+int persistStorage(char *path)
 {
     FILE *fptr;
-    fptr = fopen("filename.txt", "w");
+    fptr = fopen(path, "w");
 
     if (fptr == NULL)
     {
@@ -347,7 +347,7 @@ int persistStorage()
         return 1;
     }
 
-    printf("Successfully created a file");
+    printf("Successfully created a save file \n");
 
     // for (int i = 0; i < STORAGE_SZ; i++)
     // {
@@ -365,4 +365,6 @@ int persistStorage()
     //         }
     //     }
     // }
+
+    return 0;
 }
