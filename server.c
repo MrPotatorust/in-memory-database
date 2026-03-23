@@ -213,9 +213,9 @@ int persist()
     time(&saveTime);
 
     // Generate the filename from the current time
-    char filePath[TIME_T_SECONDS_DIGITS + 4]; // add the extension length
+    char filePath[TIME_T_SECONDS_DIGITS + 5]; // add the extension length + null terminator
     itoa(saveTime, filePath, 10);
-    strncat(filePath, STORAGE_FILE_EXT, 4);
+    strncat(filePath, STORAGE_FILE_EXT, 5);
 
     if (fork() == 0)
     {
