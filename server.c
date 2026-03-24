@@ -9,7 +9,16 @@
 #include <sys/epoll.h>
 #include <errno.h>
 #include <dirent.h>
+#include <fcntl.h>
 #include <unistd.h>
+
+#include "config.h"
+#include "server.h"
+#include "./src/helpers.h"
+#include "./src/actions.h"
+#include "./src/seeder.h"
+#include "./src/config_parser/config.h"
+
 #define MAX_BUFFER_LENGTH 256
 #define MAX_CONNECTIONS 1000
 #define PORT 8080
@@ -19,15 +28,6 @@
 #define TIME_T_SECONDS_DIGITS 10
 #define STORAGE_DIR_PATH "./storage"
 #define STORAGE_FILE_EXT ".txt"
-
-#include "config.h"
-#include "server.h"
-#include <fcntl.h>
-#include <unistd.h>
-#include "./src/helpers.h"
-#include "./src/actions.h"
-#include "./src/seeder.h"
-#include "./src/config_parser/config.h"
 
 // The server function
 void func(int connfd)
@@ -146,6 +146,14 @@ int main()
 
     for (;;)
     {
+        time(&currentTime);
+
+        // persist to local file
+        if (labs((long int)currentTime - (long int)lastSaveTime) > PERSIST_EVERY_SECONDS)
+        {
+            persist();
+        }
+
         nfds = epoll_wait(epollfd, events, MAX_CONNECTIONS, -1);
         if (nfds == -1)
         {
@@ -182,16 +190,6 @@ int main()
                 func(events[n].data.fd);
             }
         }
-
-        time(&currentTime);
-
-        printf("Current time %li \n", (long int)currentTime);
-
-        // persist to local file
-        if (labs((long int)currentTime - (long int)lastSaveTime) > PERSIST_EVERY_SECONDS)
-        {
-            persist();
-        }
     }
 }
 
@@ -206,19 +204,25 @@ int setnonblocking(int fd)
 
 int persist()
 {
+    pid_t pid = fork();
+    switch (pid)
+    {
+    case -1:
+        perror("fork");
+        exit(EXIT_FAILURE);
+    case 0:
+        break;
+    default:
+        printf("Running persist in child %i \n", pid);
+        return 0;
+    }
+
     time_t saveTime;
     time(&saveTime);
 
     // Generate the filename from the current time
-    char filePath[TIME_T_SECONDS_DIGITS + 5]; // add the extension length + null terminator
-    snprintf(filePath, sizeof(filePath), "%li", saveTime);
-    strncat(filePath, STORAGE_FILE_EXT, 5);
-
-    if (fork() == 0)
-    {
-        printf("Child processes cannot run persist \n");
-        return 1;
-    }
+    char filePath[strlen(STORAGE_DIR_PATH) + TIME_T_SECONDS_DIGITS + strlen(STORAGE_FILE_EXT) + 2]; // slash + null terminator
+    snprintf(filePath, sizeof(filePath), "%s/%li%s", STORAGE_DIR_PATH, saveTime, STORAGE_FILE_EXT);
 
     if (canAccessDir(STORAGE_DIR_PATH) != 0)
         return 1;

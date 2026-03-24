@@ -24,3 +24,4 @@ unsigned long hash(unsigned char *str);
 SplitResult splitString(char *string);
 int canAccessDir(char *path);
 int persistStorage(char *path);
+bool isStorageEmpty();

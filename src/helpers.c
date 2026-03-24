@@ -5,6 +5,7 @@
 #include <time.h>
 #include <errno.h>
 #include <dirent.h>
+#include <unistd.h>
 
 #include "helpers.h"
 #include "../config.h"
@@ -338,6 +339,12 @@ int canAccessDir(char *path)
 
 int persistStorage(char *path)
 {
+    if (isStorageEmpty())
+    {
+        printf("Nothing to save, storage is empty \n");
+        return 1;
+    }
+
     FILE *fptr;
     fptr = fopen(path, "w");
 
@@ -349,22 +356,41 @@ int persistStorage(char *path)
 
     printf("Successfully created a save file \n");
 
-    // for (int i = 0; i < STORAGE_SZ; i++)
-    // {
+    for (int i = 0; i < STORAGE_SZ; i++)
+    {
 
-    //     Node *curNode = storage[i];
+        Node *curNode = storage[i];
 
-    //     if (curNode != NULL)
-    //     {
-    //         if (curNode->next != NULL)
-    //         {
-    //             while (curNode->next != NULL)
-    //             {
-    //                 curNode = curNode->next;
-    //             }
-    //         }
-    //     }
-    // }
+        if (curNode != NULL)
+        {
+            if (curNode->next != NULL)
+            {
+                while (curNode->next != NULL)
+                {
+                    curNode = curNode->next;
+                }
+            }
+
+            fprintf(fptr, "%s %s\n", curNode->key, curNode->value);
+        }
+    }
+
+    fclose(fptr);
 
     return 0;
+}
+
+bool isStorageEmpty()
+{
+
+    for (int i = 0; i < STORAGE_SZ; i++)
+    {
+        Node *curNode = storage[i];
+
+        if (curNode != NULL)
+        {
+            return false;
+        }
+    }
+    return true;
 }
