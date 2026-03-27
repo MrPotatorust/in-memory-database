@@ -28,17 +28,26 @@ char *action(char *string)
     switch (splitAction.strings[0][0])
     {
     case 's':
-        if (splitAction.count != 3)
+        if (!(splitAction.count == 3 || splitAction.count == 4))
         {
-            strcpy(message, "Didnt pass correct amount of arguments 3, [action] [key] [value] \n");
+            strcpy(message, "Didnt pass correct amount of arguments, [action] [key] [value] [?expires] \n");
             return message;
         }
-        actionMessage = actionSave(splitAction.strings[1], splitAction.strings[2]);
+
+        int expiresInSeconds = 0;
+        if (splitAction.count == 4)
+        {
+            expiresInSeconds = atoi(splitAction.strings[3]);
+        }
+
+        printf("Seconds %i \n", expiresInSeconds);
+
+        actionMessage = actionSave(splitAction.strings[1], splitAction.strings[2], expiresInSeconds);
         break;
     case 'g':
         if (splitAction.count != 2)
         {
-            strcpy(message, "Didnt pass correct amount of arguments 2, [action] [key] \n");
+            strcpy(message, "Didnt pass correct amount of arguments, [action] [key] \n");
             return message;
         }
         actionMessage = actionGetValue(splitAction.strings[1]);
@@ -46,7 +55,7 @@ char *action(char *string)
     case 'd':
         if (splitAction.count != 2)
         {
-            strcpy(message, "Didnt pass correct amount of arguments 2, [action] [key] \n");
+            strcpy(message, "Didnt pass correct amount of arguments, [action] [key] \n");
             return message;
         }
         actionMessage = actionDelete(splitAction.strings[1]);
@@ -67,10 +76,12 @@ char *action(char *string)
     return message;
 }
 
-char *actionSave(char *key, char *value)
+char *actionSave(char *key, char *value, int expiresInSeconds)
 {
     size_t messageSize = sizeof(char) * MAX_MESSAGE_SZ;
     char *message = malloc(messageSize);
+    time_t currentTime;
+    time(&currentTime);
 
     if (message == NULL)
     {
@@ -102,6 +113,8 @@ char *actionSave(char *key, char *value)
 
     strncpy(newNode->value, value, VALUE_SZ - 1);
     newNode->value[VALUE_SZ - 1] = '\0';
+
+    newNode->expires_at = expiresInSeconds ? currentTime + expiresInSeconds : 0;
 
     newNode->next = NULL;
 

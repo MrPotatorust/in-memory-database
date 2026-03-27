@@ -1,3 +1,5 @@
+#include <time.h>
+
 #ifndef CONFIG_INCLUDED
 #define CONFIG_INCLUDED
 
@@ -14,6 +16,7 @@ typedef struct Node
     struct Node *next;
     char key[KEY_SZ];
     char value[VALUE_SZ];
+    time_t expires_at;
 } Node;
 
 extern Node *storage[STORAGE_SZ];

@@ -10,6 +10,7 @@ typedef struct
 void printStorage();
 int saveNode(Node *newNode, bool force);
 int deleteNode(char *key);
+bool isNodeExpired(Node *node);
 void freeStorage();
 char *getValue(char *key);
 long unsigned int getStorageIndex(char *str);

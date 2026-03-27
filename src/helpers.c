@@ -22,7 +22,7 @@ void printStorage()
         if (curNode != NULL)
         {
             printf("------------------------ \n");
-            printf("%s, %s\n", curNode->key, curNode->value);
+            printf("%s, %s, %li \n", curNode->key, curNode->value, curNode->expires_at);
             if (curNode->next != NULL)
             {
                 while (curNode->next != NULL)
@@ -30,7 +30,7 @@ void printStorage()
                     curNode = curNode->next;
                     printf("| \n");
                     printf("->");
-                    printf(" %s, %s\n", curNode->key, curNode->value);
+                    printf(" %s, %s %li \n", curNode->key, curNode->value, curNode->expires_at);
                 }
             }
         }
@@ -61,6 +61,7 @@ int saveNode(Node *newNode, bool force)
                 return 1;
         }
         strcpy(curNode->value, newNode->value);
+        curNode->expires_at = newNode->expires_at;
         free(newNode);
         return 0;
     }
@@ -115,6 +116,7 @@ char *getValue(char *key)
 
     if (curNode == NULL)
     {
+        free(valueStr);
         return NULL;
     }
 
@@ -123,8 +125,16 @@ char *getValue(char *key)
         curNode = curNode->next;
     }
 
+    if (isNodeExpired(curNode))
+    {
+        deleteNode(curNode->key);
+        free(valueStr);
+        return NULL;
+    }
+
     if (strcmp(curNode->key, key) == 0)
     {
+
         strcpy(valueStr, curNode->value);
         return valueStr;
     }
@@ -166,6 +176,18 @@ int deleteNode(char *key)
 
     free(curNode);
     return 0;
+}
+
+bool isNodeExpired(Node *node)
+{
+
+    if (node->expires_at == 0)
+        return false;
+
+    time_t currentTime;
+    time(&currentTime);
+
+    return currentTime < node->expires_at ? false : true;
 }
 
 long unsigned int getStorageIndex(char *str)
