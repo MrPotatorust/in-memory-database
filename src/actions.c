@@ -107,7 +107,7 @@ char *actionSave(char *key, char *value)
 
     saveNode(newNode, 1);
 
-    snprintf(message, messageSize, "saved %s, %s \n", newNode->key, newNode->value);
+    snprintf(message, messageSize, "saved %s, %s \n", key, value);
     return message;
 }
 
