@@ -90,6 +90,7 @@ int main()
     socklen_t addrlen;
     struct sockaddr_in servaddr, cli;
     struct epoll_event ev, events[MAX_CONNECTIONS];
+    int shouldRun = 1;
 
     time_t currentTime;
     time_t lastSaveTime = 0;
@@ -144,7 +145,15 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    for (;;)
+    ev.events = EPOLLIN;
+    ev.data.fd = STDIN_FILENO;
+    if (epoll_ctl(epollfd, EPOLL_CTL_ADD, STDIN_FILENO, &ev) == -1)
+    {
+        perror("epoll_ctl: stdin");
+        exit(EXIT_FAILURE);
+    }
+
+    for (; shouldRun;)
     {
         time(&currentTime);
 
@@ -152,6 +161,7 @@ int main()
         if (labs((long int)currentTime - (long int)lastSaveTime) > PERSIST_EVERY_SECONDS)
         {
             persist();
+            lastSaveTime = currentTime;
         }
 
         nfds = epoll_wait(epollfd, events, MAX_CONNECTIONS, -1);
@@ -184,6 +194,25 @@ int main()
                     exit(EXIT_FAILURE);
                 }
             }
+            else if (events[n].data.fd == STDIN_FILENO)
+            {
+                char commandBuffer[MAX_BUFFER_LENGTH];
+                memset(commandBuffer, 0, sizeof(commandBuffer));
+
+                if (fgets(commandBuffer, sizeof(commandBuffer), stdin) == NULL)
+                {
+                    continue;
+                }
+
+                commandBuffer[strcspn(commandBuffer, "\n")] = 0;
+
+                if (strcmp(commandBuffer, "exit") == 0)
+                {
+                    printf("Exit command received. Stopping server...\n");
+                    shouldRun = 0;
+                    break;
+                }
+            }
             else
             {
                 // Function for chatting between client and server
@@ -191,6 +220,11 @@ int main()
             }
         }
     }
+
+    close(epollfd);
+    close(sockfd);
+
+    return 0;
 }
 
 int setnonblocking(int fd)
@@ -225,9 +259,9 @@ int persist()
     snprintf(filePath, sizeof(filePath), "%s/%li%s", STORAGE_DIR_PATH, saveTime, STORAGE_FILE_EXT);
 
     if (canAccessDir(STORAGE_DIR_PATH) != 0)
-        return 1;
+        _exit(EXIT_FAILURE);
 
     persistStorage(filePath);
 
-    return 0;
+    _exit(EXIT_SUCCESS);
 }
