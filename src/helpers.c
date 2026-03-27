@@ -40,7 +40,6 @@ void printStorage()
 
 int saveNode(Node *newNode, bool force)
 {
-
     long unsigned int arrIndex = getStorageIndex(newNode->key);
 
     if (storage[arrIndex] == NULL)
@@ -50,27 +49,23 @@ int saveNode(Node *newNode, bool force)
     }
 
     Node *curNode = storage[arrIndex];
-
     while (curNode->next != NULL && strcmp(curNode->key, newNode->key))
-    {
         curNode = curNode->next;
-    }
 
-    if (!force && !strcmp(curNode->key, newNode->key))
+    if (!strcmp(curNode->key, newNode->key))
     {
-        printf("A Node with this key already exists. This action will overwrite it. \n");
-        if (!getConfirmation())
+        if (!force)
         {
-            return 1;
+            printf("A Node with this key already exists. This action will overwrite it.\n");
+            if (!getConfirmation())
+                return 1;
         }
-
         strcpy(curNode->value, newNode->value);
         free(newNode);
         return 0;
     }
 
     curNode->next = newNode;
-
     return 0;
 }
 
