@@ -4,73 +4,51 @@
 #include <ctype.h>
 #include <time.h>
 
-#include "config.h"
-#include "./src/helpers.h"
-#include "./src/actions.h"
-#include "./src/seeder.h"
-#include "./src/config_parser/config.h"
-
-int action();
-
 int main(int argc, char *argv[])
 {
+    char test[] = "12345";
 
-    srand((unsigned int)time(NULL));
-
-    configT *config = initConfig();
-    printf("test %s \n", getFromConfig(config, "fun").string);
-
-    int returnCode = 0;
-
-    if (argc > 1)
+    for (int i = 0; i < strlen(test); i++)
     {
-        int seedNumber;
 
-        if (parseInt(argv[1], &seedNumber) == 3)
+        printf("Test%i, %i \n", i, test[i]);
+
+        switch (test[i] )
         {
-            printf("Usage: ./main [int seedNumber?]");
+        case 48:
+            return 0;
+            break;
+        case 49:
             return 1;
+            break;
+        case 50:
+            return 2;
+            break;
+        case 51:
+            return 3;
+            break;
+        case 52:
+            return 4;
+            break;
+        case 53:
+            return 5;
+            break;
+        case 54:
+            return 6;
+            break;
+        case 55:
+            return 7;
+            break;
+        case 56:
+            return 8;
+            break;
+        case 57:
+            return 9;
+            break;
+        default:
+            return -1;
+            break;
         }
-
-        seedStorage(seedNumber);
-    }
-
-    while (!returnCode)
-    {
-        returnCode = action();
-    }
-
-    freeStorage();
-
-    return 0;
-}
-
-int action()
-{
-
-    char *inputActionStr = getString("ACTION: ");
-    char inputAction;
-
-    inputAction = inputActionStr[0];
-
-    switch (inputAction)
-    {
-    case 's':
-        actionSave();
-        break;
-    case 'e':
-        return 0;
-    case 'p':
-        printStorage();
-        break;
-    case 'g':
-        actionGetValue();
-        break;
-    case 'd':
-        actionDelete();
-        break;
-    default:
-        break;
     }
 
     return 0;

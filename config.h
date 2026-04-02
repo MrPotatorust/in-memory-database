@@ -15,7 +15,14 @@ typedef struct Node
 {
     struct Node *next;
     char key[KEY_SZ];
-    char value[VALUE_SZ];
+    void *value;
+    enum type
+    {
+        INT, //Default long integer
+        STRING,
+        CHAR,
+        FLOAT // Default double
+    };
     time_t expires_at;
 } Node;
 

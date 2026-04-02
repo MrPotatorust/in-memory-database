@@ -70,6 +70,11 @@ int saveNode(Node *newNode, bool force)
     return 0;
 }
 
+int saveValue(Node node, void *value)
+{
+
+}
+
 void freeStorage()
 {
 
@@ -227,7 +232,7 @@ int getConfirmation()
     return 0;
 }
 
-// This can be written simpler with a for loop but I wanted to try it with a for loop
+// This can be written simpler with a for loop but I wanted to try it without a for loop
 int parseInt(char *inputString, int *outputInt)
 {
 

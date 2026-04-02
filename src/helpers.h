@@ -9,6 +9,7 @@ typedef struct
 
 void printStorage();
 int saveNode(Node *newNode, bool force);
+int saveValue(Node node, void *value);
 int deleteNode(char *key);
 bool isNodeExpired(Node *node);
 void freeStorage();
