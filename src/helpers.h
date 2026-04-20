@@ -1,5 +1,4 @@
 #include "../config.h"
-#include <stdbool.h>
 
 typedef struct
 {
@@ -7,14 +6,6 @@ typedef struct
     char **strings;
 } SplitResult;
 
-void printStorage();
-int saveNode(Node *newNode, bool force);
-int saveValue(Node node, void *value);
-int deleteNode(char *key);
-bool isNodeExpired(Node *node);
-void freeStorage();
-char *getValue(char *key);
-long unsigned int getStorageIndex(char *str);
 char *getString(char prompt[]);
 char getChar();
 // Returns 1 if true and logs Are you sure? to the console
@@ -25,5 +16,3 @@ char generateRandomChar();
 unsigned long hash(unsigned char *str);
 SplitResult splitString(char *string);
 int canAccessDir(char *path);
-int persistStorage(char *path);
-bool isStorageEmpty();

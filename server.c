@@ -14,10 +14,11 @@
 
 #include "config.h"
 #include "server.h"
-#include "./src/helpers.h"
-#include "./src/actions.h"
-#include "./src/seeder.h"
-#include "./src/config_parser/config.h"
+#include "src/helpers.h"
+#include "src/actions.h"
+#include "src/seeder.h"
+#include "src/config_parser/config.h"
+#include "src/storage_manager.h"
 
 #define MAX_BUFFER_LENGTH 256
 #define MAX_CONNECTIONS 1000
@@ -86,6 +87,11 @@ void func(int connfd)
 // Driver function
 int main()
 {
+    if (initStorage())
+    {
+        printf("Exiting... \n");
+        return 1;
+    }
     int sockfd, connfd, epollfd, nfds;
     socklen_t addrlen;
     struct sockaddr_in servaddr, cli;
@@ -264,4 +270,8 @@ int persist()
     persistStorage(filePath);
 
     _exit(EXIT_SUCCESS);
+}
+
+void safelyExit(){
+    
 }

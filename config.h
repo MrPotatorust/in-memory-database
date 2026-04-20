@@ -3,7 +3,9 @@
 #ifndef CONFIG_INCLUDED
 #define CONFIG_INCLUDED
 
-#define STORAGE_SZ 1000
+#define BASE_STORAGE_SZ 1000
+#define STORAGE_SCALE_FACTOR 2
+#define SCALE_STORAGE_AT_PERCENT_FULL 50
 #define KEY_SZ 20
 #define VALUE_SZ 100
 #define USER_INPUT_SZ 100
@@ -18,14 +20,12 @@ typedef struct Node
     void *value;
     enum type
     {
-        INT, //Default long integer
+        INT, // Default long int
         STRING,
         CHAR,
         FLOAT // Default double
     };
     time_t expires_at;
 } Node;
-
-extern Node *storage[STORAGE_SZ];
 
 #endif
